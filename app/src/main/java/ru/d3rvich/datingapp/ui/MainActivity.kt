@@ -1,4 +1,4 @@
-package ru.d3rvich.datingapp
+package ru.d3rvich.datingapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
