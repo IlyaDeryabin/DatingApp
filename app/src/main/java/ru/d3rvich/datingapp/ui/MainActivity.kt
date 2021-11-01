@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,7 +33,13 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Screens.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()
-                            LoginScreen(loginViewModel = loginViewModel)
+                            LoginScreen(
+                                navController = navController,
+                                loginViewModel = loginViewModel
+                            )
+                        }
+                        composable("empty") {
+                            Text("Empty")
                         }
                     }
                 }

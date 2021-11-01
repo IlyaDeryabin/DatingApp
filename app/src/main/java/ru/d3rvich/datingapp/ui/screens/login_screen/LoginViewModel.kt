@@ -3,7 +3,11 @@ package ru.d3rvich.datingapp.ui.screens.login_screen
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.ui.base.EventHandler
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginAction
@@ -19,12 +23,11 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
     val loginViewState: State<LoginViewState>
         get() = _loginViewState
 
-    private val _loginAction = mutableStateOf<LoginAction>(LoginAction.Idle)
-    val loginAction: State<LoginAction>
-        get() = _loginAction
+    private val _loginAction = MutableSharedFlow<LoginAction>()
+    val loginAction = _loginAction.asSharedFlow()
 
     override fun obtainEvent(event: LoginEvent) {
-        when(val currentState = _loginViewState.value) {
+        when (val currentState = _loginViewState.value) {
             is LoginViewState.Login -> {
                 reduce(event = event, state = currentState)
             }
@@ -37,7 +40,16 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
     private fun reduce(event: LoginEvent, state: LoginViewState.Login) {
         when (event) {
             is LoginEvent.PerformLogin -> {
-                _loginViewState.value = LoginViewState.LoginOnProcess
+                viewModelScope.launch {
+                    _loginViewState.value = LoginViewState.LoginOnProcess
+                    val result = interactor.performLogin(event.loginEntity)
+                    if (result) {
+                        _loginAction.emit(LoginAction.LoginSuccessful)
+                    }
+                    else {
+                        _loginViewState.value = LoginViewState.LoginFailure
+                    }
+                }
             }
         }
     }
