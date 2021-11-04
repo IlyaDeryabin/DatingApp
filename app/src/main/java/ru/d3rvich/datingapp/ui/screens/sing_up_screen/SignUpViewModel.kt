@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.ui.base.EventHandler
+import ru.d3rvich.datingapp.ui.mappers.toAuthEntity
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpAction
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpEvent
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
@@ -45,11 +46,17 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         when (event) {
             is SignUpEvent.PerformSignUp -> {
                 viewModelScope.launch {
-                    val result = interactor.performSignUp(event.authEntity)
-                    if (result) {
-                        _signUpAction.emit(SignUpAction.SignUpSuccessful)
+                    if (event.singUpUiModel.passwordFirst == event.singUpUiModel.passwordSecond) {
+                        _signUpViewState.value = SignUpViewState.InProgress
+                        val authEntity = event.singUpUiModel.toAuthEntity()
+                        val result = interactor.performSignUp(authEntity)
+                        if (result) {
+                            _signUpAction.emit(SignUpAction.SignUpSuccessful)
+                        } else {
+                            _signUpViewState.value = SignUpViewState.Error("")
+                        }
                     } else {
-                        _signUpViewState.value = SignUpViewState.Error("")
+                        _signUpViewState.value = SignUpViewState.Error("Пароли не совпадают")
                     }
                 }
             }

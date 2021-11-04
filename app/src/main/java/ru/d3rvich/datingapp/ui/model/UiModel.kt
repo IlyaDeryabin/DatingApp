@@ -1,5 +1,7 @@
 package ru.d3rvich.datingapp.ui.model
 
-/**
- * Data классы-модели ui слоя
- * */
+data class SingUpUiModel(
+    val phoneNumber: String,
+    val passwordFirst: String,
+    val passwordSecond: String
+)
