@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import ru.d3rvich.datingapp.domain.entity.LoginEntity
+import ru.d3rvich.datingapp.domain.entity.AuthEntity
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginViewState
 
 @Composable
-fun LoginViewDisplay(state: LoginViewState, onLoginButtonClick: (LoginEntity) -> Unit) {
+fun LoginViewDisplay(state: LoginViewState, onLoginButtonClick: (AuthEntity) -> Unit) {
     var phoneNumber by rememberSaveable {
         mutableStateOf("")
     }
@@ -47,7 +47,7 @@ fun LoginViewDisplay(state: LoginViewState, onLoginButtonClick: (LoginEntity) ->
         Spacer(modifier = Modifier.height(24.dp))
         if (state is LoginViewState.Login) {
             Button(onClick = {
-                val loginEntity = LoginEntity(phoneNumber, password)
+                val loginEntity = AuthEntity(phoneNumber, password)
                 onLoginButtonClick(loginEntity)
             }, enabled = phoneNumber.isNotBlank() && password.isNotBlank()) {
                 Text("Log in")

@@ -19,8 +19,6 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 is LoginAction.LoginSuccessful -> {
                     navController.navigate("empty")
                 }
-                else -> {
-                }
             }
         }
     }

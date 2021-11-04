@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
             is LoginEvent.PerformLogin -> {
                 viewModelScope.launch {
                     _loginViewState.value = LoginViewState.LoginOnProcess
-                    val result = interactor.performLogin(event.loginEntity)
+                    val result = interactor.performLogin(event.authEntity)
                     if (result) {
                         _loginAction.emit(LoginAction.LoginSuccessful)
                     }
