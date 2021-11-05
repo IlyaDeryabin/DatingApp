@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
+import ru.d3rvich.datingapp.ui.Screens
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginAction
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginEvent
 import ru.d3rvich.datingapp.ui.screens.login_screen.views.LoginViewDisplay
@@ -29,6 +30,10 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 loginViewModel.obtainEvent(
                     LoginEvent.PerformLogin(loginEntity)
                 )
+            }, onSignUpClicked = {
+                navController.navigate(Screens.SignUpScreen.route) {
+                    popUpTo(0)
+                }
             })
     }
 }

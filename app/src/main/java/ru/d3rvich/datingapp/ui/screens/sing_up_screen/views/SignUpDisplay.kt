@@ -7,17 +7,17 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import ru.d3rvich.datingapp.BuildConfig
+import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.ui.model.SingUpUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 
@@ -28,7 +28,7 @@ fun SignUpDisplay(
     onLoginButtonClicked: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Вход", modifier = Modifier
+        Text(text = stringResource(id = R.string.log_in), modifier = Modifier
             .padding(8.dp)
             .clickable { onLoginButtonClicked() }
             .align(Alignment.TopEnd),
@@ -55,11 +55,17 @@ fun SignUpDisplay(
             var passwordSecond by rememberSaveable {
                 mutableStateOf("")
             }
-            TextField(value = phoneNumber, onValueChange = { phoneNumber = it })
+            TextField(value = phoneNumber, onValueChange = { phoneNumber = it }, label = {
+                Text(text = stringResource(id = R.string.phone_number))
+            })
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(value = passwordFirst, onValueChange = { passwordFirst = it })
+            TextField(value = passwordFirst, onValueChange = { passwordFirst = it }, label = {
+                Text(text = stringResource(id = R.string.password))
+            }, visualTransformation = PasswordVisualTransformation())
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(value = passwordSecond, onValueChange = { passwordSecond = it })
+            TextField(value = passwordSecond, onValueChange = { passwordSecond = it }, label = {
+                Text(text = stringResource(id = R.string.repeat_password))
+            }, visualTransformation = PasswordVisualTransformation())
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = {
@@ -69,7 +75,8 @@ fun SignUpDisplay(
                         onSignUpButtonClicked(signUpUiModel)
                     }
                 },
-                modifier = Modifier.animateContentSize()
+                modifier = Modifier.animateContentSize(),
+                enabled = phoneNumber != "" && passwordFirst != "" && passwordSecond != ""
             ) {
                 if (viewState is SignUpViewState.InProgress) {
                     CircularProgressIndicator(
@@ -78,7 +85,7 @@ fun SignUpDisplay(
                         color = Color.White
                     )
                 } else {
-                    Text("Зарегистрироваться")
+                    Text(text = stringResource(id = R.string.sign_up))
                 }
             }
         }
