@@ -32,7 +32,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 )
             }, onSignUpClicked = {
                 navController.navigate(Screens.SignUpScreen.route) {
-                    popUpTo(0)
+                    popUpTo(Screens.LoginScreen.route) {
+                        inclusive = true
+                    }
                 }
             })
     }
