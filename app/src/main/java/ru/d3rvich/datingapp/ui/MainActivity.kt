@@ -13,6 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginViewModel
+import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpScreen
+import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpViewModel
 import ru.d3rvich.datingapp.ui.theme.DatingAppTheme
 
 /**
@@ -29,13 +31,20 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.LoginScreen.route
+                        startDestination = Screens.SignUpScreen.route
                     ) {
                         composable(Screens.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()
                             LoginScreen(
                                 navController = navController,
                                 loginViewModel = loginViewModel
+                            )
+                        }
+                        composable(Screens.SignUpScreen.route) {
+                            val signUpViewModel: SignUpViewModel by viewModels()
+                            SignUpScreen(
+                                navController = navController,
+                                signUpViewModel = signUpViewModel
                             )
                         }
                         composable("empty") {
