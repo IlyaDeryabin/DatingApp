@@ -1,5 +1,6 @@
 package ru.d3rvich.datingapp.data.repositories
 
+import kotlinx.coroutines.delay
 import ru.d3rvich.datingapp.domain.entity.DialogEntity
 import ru.d3rvich.datingapp.domain.entity.DialogListItemEntity
 import ru.d3rvich.datingapp.domain.entity.MessageEntity
@@ -8,17 +9,22 @@ import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 
 class DialogRepositoryImpl : DialogRepository {
     override suspend fun getDialogList(): List<DialogListItemEntity> {
+        delay(1500)
+        val photoLink = "https://picsum.photos/300/300"
         val messageEntity = MessageEntity("0", "Привет", "")
         return listOf(
-            DialogListItemEntity("0", "Роман", "", messageEntity),
-            DialogListItemEntity("1", "Олег", "", messageEntity),
-            DialogListItemEntity("2", "Олег", "", messageEntity),
-            DialogListItemEntity("3", "Олег", "", messageEntity),
-            DialogListItemEntity("4", "Елена", "", messageEntity),
-            DialogListItemEntity("5", "Сергей", "", messageEntity),
-            DialogListItemEntity("6", "Настя", "", messageEntity),
-            DialogListItemEntity("7", "Роман", "", messageEntity),
-            DialogListItemEntity("8", "Роман", "", messageEntity),
+            DialogListItemEntity("0", "Роман", photoLink, messageEntity),
+            DialogListItemEntity("1", "Олег", photoLink, messageEntity),
+            DialogListItemEntity("2", "Олег", photoLink, messageEntity),
+            DialogListItemEntity("3", "Олег", photoLink, messageEntity),
+            DialogListItemEntity("4", "Елена", photoLink, messageEntity),
+            DialogListItemEntity("5", "Сергей", photoLink, messageEntity),
+            DialogListItemEntity("6", "Настя", photoLink, messageEntity),
+            DialogListItemEntity("7", "Роман", photoLink, messageEntity),
+            DialogListItemEntity("8", "Роман", photoLink, messageEntity),
+            DialogListItemEntity("9", "Настя", photoLink, messageEntity),
+            DialogListItemEntity("10", "Роман", photoLink, messageEntity),
+            DialogListItemEntity("11", "Роман", photoLink, messageEntity)
         )
     }
 

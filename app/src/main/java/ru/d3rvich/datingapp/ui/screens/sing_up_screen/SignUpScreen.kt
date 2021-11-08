@@ -21,7 +21,7 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel)
         signUpViewModel.signUpAction.collect { action ->
             when (action) {
                 is SignUpAction.SignUpSuccessful -> {
-                    navController.navigate("empty") {
+                    navController.navigate(Screens.DialogListScreen.route) {
                         popUpTo(Screens.SignUpScreen.route) {
                             inclusive = true
                         }
