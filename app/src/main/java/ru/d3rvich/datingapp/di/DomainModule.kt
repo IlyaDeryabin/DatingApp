@@ -7,7 +7,6 @@ import dagger.hilt.android.components.ViewModelComponent
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractorImpl
 import ru.d3rvich.datingapp.domain.repositories.AuthRepository
-import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 
 /**
  * Dagger модюль для domain слоя
@@ -17,13 +16,7 @@ import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 object DomainModule {
 
     @Provides
-    fun provideDatingInteractor(
-        authRepository: AuthRepository,
-        dialogRepository: DialogRepository
-    ): DatingInteractor {
-        return DatingInteractorImpl(
-            authRepository = authRepository,
-            dialogRepository = dialogRepository
-        )
+    fun provideDatingInteractor(repository: AuthRepository): DatingInteractor {
+        return DatingInteractorImpl(authRepository = repository)
     }
 }

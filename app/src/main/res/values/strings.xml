@@ -5,7 +5,4 @@
     <string name="sign_up">Sign up</string>
     <string name="log_in">Log in</string>
     <string name="repeat_password">Repeat password</string>
-    <string name="no_dialogs_text">There are no dialogs yet.</string>
-    <string name="dialogs_error_message">Error while loading data</string>
-    <string name="try_again">Try again</string>
 </resources>
