@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import kotlinx.coroutines.flow.collect
+import ru.d3rvich.datingapp.ui.Screens
 import ru.d3rvich.datingapp.ui.screens.dialog_list.models.DialogListAction
 import ru.d3rvich.datingapp.ui.screens.dialog_list.models.DialogListEvent
 import ru.d3rvich.datingapp.ui.screens.dialog_list.models.DialogListViewState
@@ -38,7 +39,7 @@ fun DialogListScreen(navController: NavController, viewModel: DialogListViewMode
                     navController.navigate("empty")
                 }
                 is DialogListAction.NavigateToDialog -> {
-                    navController.navigate("empty")
+                    navController.navigate(Screens.DialogScreen.route + "/${action.dialogId}")
                 }
             }
         }

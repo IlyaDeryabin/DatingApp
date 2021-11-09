@@ -9,7 +9,7 @@ import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 
 class DialogRepositoryImpl : DialogRepository {
     override suspend fun getDialogList(): List<DialogListItemEntity> {
-        delay(1500)
+        delay(1000)
         val photoLink = "https://picsum.photos/300/300"
         val messageEntity = MessageEntity("0", "Привет", "")
         return listOf(
@@ -29,6 +29,7 @@ class DialogRepositoryImpl : DialogRepository {
     }
 
     override suspend fun getDialogBy(id: String): DialogEntity {
+        delay(1000)
         val userEntity = UserEntity("1", "Роман", "")
         return DialogEntity(id, userEntity, emptyList())
     }

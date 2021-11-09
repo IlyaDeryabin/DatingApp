@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import dagger.hilt.android.AndroidEntryPoint
+import ru.d3rvich.datingapp.ui.screens.dialog.DIALOG_ID_KEY
+import ru.d3rvich.datingapp.ui.screens.dialog.DialogScreen
 import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListScreen
 import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListViewModel
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
@@ -57,6 +59,9 @@ class MainActivity : ComponentActivity() {
                             val dialogListViewModel: DialogListViewModel by viewModels()
                             DialogListScreen(navController = navController,
                                 viewModel = dialogListViewModel)
+                        }
+                        composable(Screens.DialogScreen.route + "/{$DIALOG_ID_KEY}") {
+                            DialogScreen(navController = navController)
                         }
                         composable("empty") {
                             Text("Empty")
