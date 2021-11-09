@@ -18,7 +18,11 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
         loginViewModel.loginAction.collect { action ->
             when (action) {
                 is LoginAction.LoginSuccessful -> {
-                    navController.navigate("empty")
+                    navController.navigate(Screens.DialogListScreen.route) {
+                        popUpTo(Screens.LoginScreen.route) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }

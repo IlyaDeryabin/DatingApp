@@ -6,4 +6,7 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="log_in">Вход</string>
     <string name="repeat_password">Повторите пароль</string>
+    <string name="no_dialogs_text">Диалогов пока что нет</string>
+    <string name="dialogs_error_message">Ошибка при загрузке данных</string>
+    <string name="try_again">Повторить попытку</string>
 </resources>
