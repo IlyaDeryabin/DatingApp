@@ -44,7 +44,8 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
                     _loginViewState.value = LoginViewState.LoginOnProcess
                     val result = interactor.performLogin(event.authEntity)
                     if (result) {
-                        _loginAction.emit(LoginAction.LoginSuccessful)
+//                        _loginAction.emit(LoginAction.LoginSuccessful)
+                        _loginViewState.value = LoginViewState.Login
                     }
                     else {
                         _loginViewState.value = LoginViewState.LoginFailure
