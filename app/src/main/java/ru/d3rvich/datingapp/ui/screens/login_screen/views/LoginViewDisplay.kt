@@ -49,6 +49,7 @@ fun LoginViewDisplay(
     var phoneNumber by rememberSaveable {
         mutableStateOf("")
     }
+    val isPhoneNumberValid: Boolean = phoneNumber.isNotBlank() && phoneNumber.length == 10
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -80,7 +81,7 @@ fun LoginViewDisplay(
                     phoneNumber = it.replace(Regex("[^0-9]"), "")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number, imeAction = when {
+                    keyboardType = KeyboardType.Phone, imeAction = when {
                         phoneNumber.isBlank() -> ImeAction.None
                         password.isNotBlank() -> ImeAction.Done
                         else -> ImeAction.Next
@@ -105,7 +106,8 @@ fun LoginViewDisplay(
                     val loginEntity = AuthEntity(phoneNumber, password)
                     onLoginButtonClick(loginEntity)
                 }),
-                leadingIcon = { Text("+7") }
+                leadingIcon = { Text("+7") },
+                isError = phoneNumber.isNotBlank() && !isPhoneNumberValid
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
@@ -129,7 +131,7 @@ fun LoginViewDisplay(
                     password.isBlank() -> ImeAction.None
                     phoneNumber.isNotBlank() -> ImeAction.Done
                     else -> ImeAction.Next
-                }),
+                }, keyboardType = KeyboardType.Password),
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                     val loginEntity = AuthEntity(phoneNumber, password)
@@ -147,7 +149,7 @@ fun LoginViewDisplay(
                 val loginEntity = AuthEntity(phoneNumber, password)
                 onLoginButtonClick(loginEntity)
             },
-                enabled = phoneNumber.isNotBlank() && password.isNotBlank(),
+                enabled = isPhoneNumberValid && password.isNotBlank(),
                 modifier = Modifier.animateContentSize()) {
                 if (state is LoginViewState.LoginOnProcess) {
                     CircularProgressIndicator(modifier = Modifier.size(16.dp),
