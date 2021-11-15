@@ -1,10 +1,13 @@
 package ru.d3rvich.datingapp.ui.screens.login_screen
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
 import ru.d3rvich.datingapp.ui.Screens
@@ -12,6 +15,8 @@ import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginAction
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginEvent
 import ru.d3rvich.datingapp.ui.screens.login_screen.views.LoginViewDisplay
 
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
 @Composable
 fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     LaunchedEffect(Unit) {

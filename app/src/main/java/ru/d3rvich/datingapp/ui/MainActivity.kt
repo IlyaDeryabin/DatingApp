@@ -8,6 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,6 +27,7 @@ import ru.d3rvich.datingapp.ui.theme.DatingAppTheme
 /**
  * Главное и единственное активити для всего приложения
  * */
+@ExperimentalComposeUiApi
 @ExperimentalCoilApi
 @ExperimentalAnimationApi
 @AndroidEntryPoint
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.SignUpScreen.route
+                        startDestination = Screens.LoginScreen.route
                     ) {
                         composable(Screens.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()
