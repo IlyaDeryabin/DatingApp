@@ -20,7 +20,7 @@ fun PasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    @StringRes labelText: Int = R.string.password,
+    @StringRes labelStringRes: Int = R.string.password,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -49,7 +49,7 @@ fun PasswordField(
         modifier = modifier,
         singleLine = true,
         visualTransformation = visualTransformation,
-        label = { Text(text = stringResource(id = labelText)) },
+        label = { Text(text = stringResource(id = labelStringRes)) },
         trailingIcon = {
             IconButton(onClick = { isPasswordVisible = !isPasswordVisible },
                 content = visibilityIcon)

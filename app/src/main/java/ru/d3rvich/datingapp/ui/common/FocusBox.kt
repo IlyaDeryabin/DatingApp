@@ -11,9 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 
-/**
-
- */
 @Composable
 fun FocusBox(
     modifier: Modifier = Modifier,

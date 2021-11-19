@@ -9,7 +9,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -18,9 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import ru.d3rvich.datingapp.R
+import ru.d3rvich.datingapp.ui.common.FocusBox
+import ru.d3rvich.datingapp.ui.common.PasswordField
+import ru.d3rvich.datingapp.ui.common.PhoneNumberField
 import ru.d3rvich.datingapp.ui.model.SingUpUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 
@@ -31,11 +32,12 @@ fun SignUpDisplay(
     onSignUpButtonClicked: (SingUpUiModel) -> Unit,
     onLoginButtonClicked: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(id = R.string.log_in), modifier = Modifier
-            .padding(8.dp)
-            .clickable { if (viewState !is SignUpViewState.InProgress) onLoginButtonClicked() }
-            .align(Alignment.TopEnd),
+    FocusBox(modifier = Modifier.fillMaxSize()) {
+        Text(text = stringResource(id = R.string.log_in),
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable { if (viewState !is SignUpViewState.InProgress) onLoginButtonClicked() }
+                .align(Alignment.TopEnd),
             fontStyle = FontStyle.Italic
         )
         Column(
@@ -53,30 +55,29 @@ fun SignUpDisplay(
             var passwordSecond by rememberSaveable {
                 mutableStateOf("")
             }
-            TextField(value = phoneNumber, onValueChange = { phoneNumber = it }, label = {
-                Text(text = stringResource(id = R.string.phone_number))
-            },
+            PhoneNumberField(
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it.replace(Regex("[^0-9]"), "") },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Phone
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+            PasswordField(
                 value = passwordFirst,
                 onValueChange = { passwordFirst = it },
-                label = {
-                    Text(text = stringResource(id = R.string.password))
-                },
-                visualTransformation = PasswordVisualTransformation()
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                )
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+            PasswordField(
                 value = passwordSecond,
                 onValueChange = { passwordSecond = it },
-                label = {
-                    Text(text = stringResource(id = R.string.repeat_password))
-                },
-                visualTransformation = PasswordVisualTransformation()
+                labelStringRes = R.string.repeat_password,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                )
             )
             AnimatedVisibility(visible = viewState is SignUpViewState.Error) {
                 if (viewState is SignUpViewState.Error) {
