@@ -7,23 +7,19 @@ import ru.d3rvich.datingapp.ui.Screens
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorAction
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorViewState
 import ru.d3rvich.datingapp.ui.screens.profile_editor.views.ProfileEditorViewDisplay
-import ru.d3rvich.datingapp.ui.screens.profile_editor.views.ProfileEditorViewEmptyProfile
 
 @Composable
 fun ProfileEditorScreen(navController: NavController, viewModel: ProfileEditorViewModel) {
-
-    var isError by remember {
-        mutableStateOf(false)
-    }
 
     when (val state = viewModel.viewState.value) {
         ProfileEditorViewState.Idle -> {
         }
         is ProfileEditorViewState.Editor -> ProfileEditorViewDisplay(
-            profile = state.profile,
-            isError = isError
+            profile = state.profile
         )
-        ProfileEditorViewState.EmptyProfile -> ProfileEditorViewEmptyProfile(isError = isError)
+        ProfileEditorViewState.EmptyProfile -> ProfileEditorViewDisplay(
+            profile = null
+        )
         is ProfileEditorViewState.Error -> TODO()
         ProfileEditorViewState.SaveInProgress -> TODO()
     }

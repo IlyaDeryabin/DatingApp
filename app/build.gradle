@@ -61,20 +61,20 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'androidx.activity:activity-compose:1.4.0'
 
     /* Compose extensions */
     implementation 'io.coil-kt:coil-compose:1.4.0'
     implementation 'androidx.navigation:navigation-compose:2.4.0-beta02'
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-beta01'
-    implementation 'com.google.accompanist:accompanist-placeholder-material:0.21.2-beta'
+    implementation 'com.google.accompanist:accompanist-placeholder-material:0.21.4-beta'
 
     /* Dagger Hilt */
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     /* KTX */
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
 
     /* Test dependencies */

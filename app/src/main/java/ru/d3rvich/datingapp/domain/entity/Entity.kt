@@ -1,7 +1,5 @@
 package ru.d3rvich.datingapp.domain.entity
 
-import java.util.*
-
 /**
  * Data классы-сущности domain слоя
  * */
@@ -28,7 +26,7 @@ data class ProfileEntity(
     val id: Long,
     val name: String,
     val city: String,
-    val birthday: Date,
+    val birthday: DateEntity,
     val description: String,
     val zodiacId: Int,
     val fateNumber: Int,
@@ -36,3 +34,9 @@ data class ProfileEntity(
     val personalitiesNumber: Int,
     val imageLink: String
 )
+
+data class DateEntity(val day: Int, val month: Int, val year: Int) {
+    override fun toString(): String {
+        return "$day.$month.$year"
+    }
+}

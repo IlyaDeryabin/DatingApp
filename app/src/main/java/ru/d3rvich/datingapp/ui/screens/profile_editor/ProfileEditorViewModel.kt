@@ -21,7 +21,8 @@ import javax.inject.Inject
 class ProfileEditorViewModel @Inject constructor(private val interactor: DatingInteractor) :
     ViewModel(), EventHandler<ProfileEditorEvent> {
 
-    private val _viewState = mutableStateOf<ProfileEditorViewState>(ProfileEditorViewState.Idle)
+    private val _viewState =
+        mutableStateOf<ProfileEditorViewState>(ProfileEditorViewState.EmptyProfile)
     val viewState: State<ProfileEditorViewState>
         get() = _viewState
 
