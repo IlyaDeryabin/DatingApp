@@ -5,11 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,7 +17,6 @@ import coil.annotation.ExperimentalCoilApi
 import dagger.hilt.android.AndroidEntryPoint
 import ru.d3rvich.datingapp.ui.screens.dialog.DIALOG_ID_KEY
 import ru.d3rvich.datingapp.ui.screens.dialog.DialogScreen
-import ru.d3rvich.datingapp.ui.screens.dialog.DialogViewModel
 import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListScreen
 import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListViewModel
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
@@ -31,6 +30,7 @@ import ru.d3rvich.datingapp.ui.theme.DatingAppTheme
 /**
  * Главное и единственное активити для всего приложения
  * */
+@ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalCoilApi
 @ExperimentalAnimationApi
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.SignUpScreen.route // Change start destination on finish
+                        startDestination = Screens.EmptyProfileEditor.route // Change start destination on finish
                     ) {
                         composable(Screens.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()

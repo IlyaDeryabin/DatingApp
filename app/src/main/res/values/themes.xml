@@ -22,10 +22,4 @@
     <style name="Theme.DatingApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.DatingApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="CalenderViewCustom" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="colorAccent">@color/purple_500</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSurface">@color/purple_700</item>
-    </style>
 </resources>

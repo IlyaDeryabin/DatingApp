@@ -9,4 +9,53 @@
     <string name="dialogs_error_message">Error while loading data</string>
     <string name="try_again">Try again</string>
     <string name="profile_editor_error_message">Error while saving profile data</string>
+    <string name="save">Save</string>
+
+    <!--16 personalities-->
+    <string name="pers_healer">Healer</string>
+    <string name="pers_mastermind">Mastermind</string>
+    <string name="pers_counselor">Counselor</string>
+    <string name="pers_architect">Architect</string>
+
+    <string name="pers_champion">Champion</string>
+    <string name="pers_commander">Commander</string>
+    <string name="pers_visionary">Visionary</string>
+    <string name="pers_teacher">Teacher</string>
+
+    <string name="pers_protector">Protector</string>
+    <string name="pers_composer">Composer</string>
+    <string name="pers_inspector">Inspector</string>
+    <string name="pers_craftsperson">Craftsperson</string>
+
+    <string name="pers_provider">Provider</string>
+    <string name="pers_performer">Performer</string>
+    <string name="pers_supervisor">Supervisor</string>
+    <string name="pers_dynamo">Dynamo</string>
+    <!--END 16 personalities-->
+
+    <!--Zodiac-->
+    <string name="zod_aries">Aries</string>
+    <string name="zod_taurus">Taurus</string>
+    <string name="zod_gemini">Gemini</string>
+    <string name="zod_cancer">Cancer</string>
+    <string name="zod_leo">Leo</string>
+    <string name="zod_virgo">Virgo</string>
+    <string name="zod_libra">Libra</string>
+    <string name="zod_scorpio">Scorpio</string>
+    <string name="zod_sagittarius">Sagittarius</string>
+    <string name="zod_capricorn">Capricorn</string>
+    <string name="zod_aquarius">Aquarius</string>
+    <string name="zod_pisces">Pisces</string>
+    <!--END Zodiac-->
+
+    <string name="select_photo">Select photo</string>
+    <string name="name">Name</string>
+    <string name="city">City</string>
+    <string name="birthday">Birthday</string>
+    <string name="description">Description</string>
+    <string name="zodiac_sign">Zodiac sign</string>
+    <string name="fate_number">Fate number</string>
+    <string name="socionic_type">Socionic type</string>
+    <string name="personalities" translatable="false">16 Personalities</string>
+    <string name="describe_yourself">Describe yourself</string>
 </resources>

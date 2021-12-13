@@ -23,7 +23,6 @@ data class DialogEntity(
 data class MessageEntity(val senderId: String, val massage: String, val dispatchTime: String)
 
 data class ProfileEntity(
-    val id: Long,
     val name: String,
     val city: String,
     val birthday: DateEntity,

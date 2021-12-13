@@ -10,4 +10,51 @@
     <string name="dialogs_error_message">Ошибка при загрузке данных</string>
     <string name="try_again">Повторить попытку</string>
     <string name="profile_editor_error_message">Ошибка при сохранении данных</string>
+    <string name="save">Сохранить</string>
+
+    <!--16 personalities-->
+    <string name="pers_healer">Посредник</string>
+    <string name="pers_mastermind">Вдохновитель</string>
+    <string name="pers_counselor">Адвокат</string>
+    <string name="pers_architect">Логик</string>
+
+    <string name="pers_champion">Активист</string>
+    <string name="pers_commander">Коммандир</string>
+    <string name="pers_visionary">Визионер</string>
+    <string name="pers_teacher">Учитель</string>
+
+    <string name="pers_protector">Защитник</string>
+    <string name="pers_composer">Творитель</string>
+    <string name="pers_inspector">Инспектор</string>
+    <string name="pers_craftsperson">Ремесленник</string>
+
+    <string name="pers_provider">Советник</string>
+    <string name="pers_performer">Исполнитель</string>
+    <string name="pers_supervisor">Руководитель</string>
+    <string name="pers_dynamo">Предприниматель</string>
+    <!--END 16 personalities-->
+
+    <!--Zodiac-->
+    <string name="zod_aries">Овен</string>
+    <string name="zod_taurus">Телец</string>
+    <string name="zod_gemini">Близнецы</string>
+    <string name="zod_cancer">Рак</string>
+    <string name="zod_leo">Лев</string>
+    <string name="zod_virgo">Дева</string>
+    <string name="zod_libra">Весы</string>
+    <string name="zod_scorpio">Скорпион</string>
+    <string name="zod_sagittarius">Стрелец</string>
+    <string name="zod_capricorn">Козерог</string>
+    <string name="zod_aquarius">Водолей</string>
+    <string name="zod_pisces">Рыбы</string>
+    <string name="select_photo">Выберите фотографию</string>
+    <string name="name">Имя</string>
+    <string name="birthday">День рождения</string>
+    <string name="city">Город</string>
+    <string name="description">О себе</string>
+    <string name="zodiac_sign">Знак зодиака</string>
+    <string name="fate_number">Число судьбы</string>
+    <string name="socionic_type">Соционический тип</string>
+    <string name="describe_yourself">Опишите себя</string>
+    <!--END Zodiac-->
 </resources>

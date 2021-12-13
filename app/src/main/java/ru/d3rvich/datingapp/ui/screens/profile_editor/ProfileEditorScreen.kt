@@ -1,13 +1,16 @@
 package ru.d3rvich.datingapp.ui.screens.profile_editor
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
 import ru.d3rvich.datingapp.ui.Screens
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorAction
+import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorEvent
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorViewState
 import ru.d3rvich.datingapp.ui.screens.profile_editor.views.ProfileEditorViewDisplay
 
+@ExperimentalMaterialApi
 @Composable
 fun ProfileEditorScreen(navController: NavController, viewModel: ProfileEditorViewModel) {
 
@@ -15,10 +18,15 @@ fun ProfileEditorScreen(navController: NavController, viewModel: ProfileEditorVi
         ProfileEditorViewState.Idle -> {
         }
         is ProfileEditorViewState.Editor -> ProfileEditorViewDisplay(
-            profile = state.profile
+            profile = state.profile,
+            onSaveProfile = {
+                viewModel.obtainEvent(
+                    event = ProfileEditorEvent.OnSaveButtonClicked(it)
+                )
+            }
         )
         ProfileEditorViewState.EmptyProfile -> ProfileEditorViewDisplay(
-            profile = null
+            profile = null, {}
         )
         is ProfileEditorViewState.Error -> TODO()
         ProfileEditorViewState.SaveInProgress -> TODO()
