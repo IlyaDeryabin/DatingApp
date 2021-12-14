@@ -8,6 +8,7 @@ import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractorImpl
 import ru.d3rvich.datingapp.domain.repositories.AuthRepository
 import ru.d3rvich.datingapp.domain.repositories.DialogRepository
+import ru.d3rvich.datingapp.domain.repositories.ProfileRepository
 
 /**
  * Dagger модюль для domain слоя
@@ -20,8 +21,12 @@ object DomainModule {
     fun provideDatingInteractor(
         repository: AuthRepository,
         dialogRepository: DialogRepository,
+        profileRepository: ProfileRepository
     ): DatingInteractor {
-        return DatingInteractorImpl(authRepository = repository,
-            dialogRepository = dialogRepository)
+        return DatingInteractorImpl(
+            authRepository = repository,
+            dialogRepository = dialogRepository,
+            profileRepository = profileRepository
+        )
     }
 }

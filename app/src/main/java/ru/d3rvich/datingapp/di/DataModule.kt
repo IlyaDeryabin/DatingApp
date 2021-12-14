@@ -6,8 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.d3rvich.datingapp.data.repositories.AuthRepositoryImpl
 import ru.d3rvich.datingapp.data.repositories.DialogRepositoryImpl
+import ru.d3rvich.datingapp.data.repositories.ProfileRepositoryImpl
 import ru.d3rvich.datingapp.domain.repositories.AuthRepository
 import ru.d3rvich.datingapp.domain.repositories.DialogRepository
+import ru.d3rvich.datingapp.domain.repositories.ProfileRepository
 
 /**
  * Dagger модуль data слоя
@@ -24,5 +26,10 @@ object DataModule {
     @Provides
     fun provideDialogRepository(): DialogRepository {
         return DialogRepositoryImpl()
+    }
+
+    @Provides
+    fun provideProfileRepository(): ProfileRepository {
+        return ProfileRepositoryImpl()
     }
 }

@@ -26,7 +26,7 @@ class DialogViewModel @Inject constructor(
 
     init {
         val dialogId: String = savedStateHandle.get<String>(DIALOG_ID_KEY)
-            ?: error("Параметер Dialog ID не был добавлен в BackStackEntry")
+            ?: error("Параметр Dialog ID не был добавлен в BackStackEntry")
         viewModelScope.launch {
             val dialog = interactor.getDialogBy(dialogId)
             _viewState.value = DialogViewState.Dialog(dialog)

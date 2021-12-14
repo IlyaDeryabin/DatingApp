@@ -5,4 +5,5 @@ sealed class Screens(val route: String) {
     object SignUpScreen : Screens("sign_up")
     object DialogListScreen : Screens("dialog_list")
     object DialogScreen : Screens("dialog")
+    object EmptyProfileEditor : Screens("profile_editor_empty")
 }

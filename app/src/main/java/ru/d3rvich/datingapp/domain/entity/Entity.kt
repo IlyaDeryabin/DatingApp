@@ -14,6 +14,28 @@ data class DialogListItemEntity(
     val lastMassage: MessageEntity
 )
 
-data class DialogEntity(val dialogId: String, val companion: UserEntity, val messages: List<MessageEntity>)
+data class DialogEntity(
+    val dialogId: String,
+    val companion: UserEntity,
+    val messages: List<MessageEntity>
+)
 
 data class MessageEntity(val senderId: String, val massage: String, val dispatchTime: String)
+
+data class ProfileEntity(
+    val name: String,
+    val city: String,
+    val birthday: DateEntity,
+    val description: String,
+    val zodiacId: Int,
+    val fateNumber: Int,
+    val socionicTypeNumber: Int,
+    val personalitiesNumber: Int,
+    val imageLink: String
+)
+
+data class DateEntity(val day: Int, val month: Int, val year: Int) {
+    override fun toString(): String {
+        return "$day.$month.$year"
+    }
+}
