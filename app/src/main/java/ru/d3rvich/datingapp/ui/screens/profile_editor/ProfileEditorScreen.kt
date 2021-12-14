@@ -26,17 +26,26 @@ fun ProfileEditorScreen(navController: NavController, viewModel: ProfileEditorVi
             }
         )
         ProfileEditorViewState.EmptyProfile -> ProfileEditorViewDisplay(
-            profile = null, {}
+            profile = null, onSaveProfile = {
+                viewModel.obtainEvent(
+                    event = ProfileEditorEvent.OnSaveButtonClicked(it)
+                )
+            }
         )
         is ProfileEditorViewState.Error -> TODO()
-        ProfileEditorViewState.SaveInProgress -> TODO()
+        ProfileEditorViewState.SaveInProgress -> {
+        }
     }
 
     LaunchedEffect(Unit) {
         viewModel.action.collect { action ->
             when (action) {
                 ProfileEditorAction.NavigateToDialogList -> {
-                    navController.navigate(Screens.DialogListScreen.route)
+                    navController.navigate(Screens.DialogListScreen.route) {
+                        popUpTo(Screens.EmptyProfileEditor.route) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }

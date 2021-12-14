@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.EmptyProfileEditor.route // Change start destination on finish
+                        startDestination = Screens.LoginScreen.route
                     ) {
                         composable(Screens.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()
