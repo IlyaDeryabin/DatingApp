@@ -247,6 +247,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     val profileEntity = ProfileEntity(
                         name = name,
                         city = city,
+                        age = 0,
                         birthday = DateEntity(0, 0, 0),
                         description = description,
                         zodiacId = 0,

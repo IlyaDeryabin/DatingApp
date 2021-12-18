@@ -5,10 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import dagger.hilt.android.AndroidEntryPoint
 import ru.d3rvich.datingapp.ui.navigation.createExternalRouter
-import ru.d3rvich.datingapp.ui.screens.MainScreen
+import ru.d3rvich.datingapp.ui.screens.main.MainScreen
 import ru.d3rvich.datingapp.ui.screens.dialog.DIALOG_ID_KEY
 import ru.d3rvich.datingapp.ui.screens.dialog.DialogScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
@@ -71,12 +69,23 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.DialogScreen.route + "/{$DIALOG_ID_KEY}") {
                             DialogScreen(navController = navController)
                         }
+                        composable(Screen.ProfileScreen.route) {
+                            Column {
+                                Text(text = "Profile view")
+                                Button(onClick = { navController.navigate(Screen.EmptyProfileEditor.route) }) {
+                                    Text(text = "Edit profile")
+                                }
+                            }
+                        }
                         composable(Screen.EmptyProfileEditor.route) {
                             val viewModel: ProfileEditorViewModel by viewModels()
                             ProfileEditorScreen(
                                 navController = navController,
                                 viewModel = viewModel
                             )
+                        }
+                        composable(Screen.Settings.route) {
+                            Text(text = "Settings")
                         }
                         composable("empty") {
                             Text("Empty")

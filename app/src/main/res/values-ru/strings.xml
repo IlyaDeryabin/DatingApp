@@ -59,4 +59,8 @@
     <string name="socionic_type">Соционический тип</string>
     <string name="describe_yourself">Опишите себя</string>
     <string name="messages">Сообщения</string>
+    <string name="find_fate">Поиск судьбы</string>
+    <string name="settings">Настройки</string>
+    <string name="profile">Профиль</string>
+    <string name="loading_error_message">Ошибка при загрузке данных</string>
 </resources>

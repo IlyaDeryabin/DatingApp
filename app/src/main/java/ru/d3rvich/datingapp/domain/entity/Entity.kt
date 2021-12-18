@@ -25,6 +25,7 @@ data class MessageEntity(val senderId: String, val massage: String, val dispatch
 data class ProfileEntity(
     val name: String,
     val city: String,
+    val age: Int,
     val birthday: DateEntity,
     val description: String,
     val zodiacId: Int,

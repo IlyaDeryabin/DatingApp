@@ -34,4 +34,8 @@ class DatingInteractorImpl @Inject constructor(
     override suspend fun saveUserProfile(profileEntity: ProfileEntity): Boolean {
         return profileRepository.saveUserProfile(profileEntity)
     }
+
+    override suspend fun getUserProfile(): ProfileEntity {
+        return profileRepository.getUserProfile()
+    }
 }

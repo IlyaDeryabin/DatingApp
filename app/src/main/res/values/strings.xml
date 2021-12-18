@@ -59,4 +59,8 @@
     <string name="personalities" translatable="false">16 Personalities</string>
     <string name="describe_yourself">Describe yourself</string>
     <string name="messages">Messages</string>
+    <string name="find_fate">Find your fate</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="loading_error_message">Error while loading</string>
 </resources>
