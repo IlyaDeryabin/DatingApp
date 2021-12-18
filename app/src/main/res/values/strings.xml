@@ -58,4 +58,5 @@
     <string name="socionic_type">Socionic type</string>
     <string name="personalities" translatable="false">16 Personalities</string>
     <string name="describe_yourself">Describe yourself</string>
+    <string name="messages">Messages</string>
 </resources>

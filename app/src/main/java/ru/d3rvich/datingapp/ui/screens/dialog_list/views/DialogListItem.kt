@@ -30,39 +30,53 @@ import ru.d3rvich.datingapp.domain.entity.MessageEntity
 fun DialogListItem(dialogListItemEntity: DialogListItemEntity, onItemClicked: (String) -> Unit) {
     Box(modifier = Modifier
         .clickable { onItemClicked(dialogListItemEntity.id) }
-        .padding(start = 16.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             val imagePainter = rememberImagePainter(
                 data = dialogListItemEntity.photoLink,
                 builder = {
                     crossfade(true)
                 }
             )
-            Image(painter = imagePainter,
+            Image(
+                painter = imagePainter,
                 contentDescription = "${dialogListItemEntity.userName}'s photo",
                 modifier = Modifier
                     .size(56.dp)
                     .clip(CircleShape)
-                    .placeholder(visible = imagePainter.state is ImagePainter.State.Loading,
-                        highlight = PlaceholderHighlight.shimmer()))
+                    .placeholder(
+                        visible = imagePainter.state is ImagePainter.State.Loading,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+            )
             Box {
-                Column(modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.CenterStart)) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterStart)
+                ) {
                     Text(text = dialogListItemEntity.userName, style = MaterialTheme.typography.h6)
-                    Text(text = dialogListItemEntity.lastMassage.massage,
+                    Text(
+                        text = dialogListItemEntity.lastMassage.massage,
                         style = MaterialTheme.typography.body2,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis)
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
-                Divider(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Color.LightGray)
-                    .align(Alignment.BottomCenter))
             }
         }
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.LightGray)
+                .align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -71,9 +85,11 @@ fun DialogListItem(dialogListItemEntity: DialogListItemEntity, onItemClicked: (S
 @Composable
 fun DialogListItemPreview() {
     val messageEntity = MessageEntity("0", "Привет. Почему одна? Сейчас будет два.", "")
-    val dialogListItemEntity = DialogListItemEntity("0",
+    val dialogListItemEntity = DialogListItemEntity(
+        "0",
         "Роман",
         "https://avatars.mds.yandex.net/get-zen_doc/61319/pub_5a043bdead0f224ec2034e67_5a04405d79885e58f3fd095e/scale_1200",
-        messageEntity)
+        messageEntity
+    )
     DialogListItem(dialogListItemEntity = dialogListItemEntity, onItemClicked = {})
 }

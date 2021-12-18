@@ -47,6 +47,8 @@
     <string name="zod_capricorn">Козерог</string>
     <string name="zod_aquarius">Водолей</string>
     <string name="zod_pisces">Рыбы</string>
+    <!--END Zodiac-->
+
     <string name="select_photo">Выберите фотографию</string>
     <string name="name">Имя</string>
     <string name="birthday">День рождения</string>
@@ -56,5 +58,5 @@
     <string name="fate_number">Число судьбы</string>
     <string name="socionic_type">Соционический тип</string>
     <string name="describe_yourself">Опишите себя</string>
-    <!--END Zodiac-->
+    <string name="messages">Сообщения</string>
 </resources>

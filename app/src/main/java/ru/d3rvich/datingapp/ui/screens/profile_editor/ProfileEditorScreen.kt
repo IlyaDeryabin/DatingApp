@@ -4,7 +4,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
-import ru.d3rvich.datingapp.ui.Screens
+import ru.d3rvich.datingapp.ui.Screen
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorAction
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorEvent
 import ru.d3rvich.datingapp.ui.screens.profile_editor.models.ProfileEditorViewState
@@ -41,8 +41,8 @@ fun ProfileEditorScreen(navController: NavController, viewModel: ProfileEditorVi
         viewModel.action.collect { action ->
             when (action) {
                 ProfileEditorAction.NavigateToDialogList -> {
-                    navController.navigate(Screens.DialogListScreen.route) {
-                        popUpTo(Screens.EmptyProfileEditor.route) {
+                    navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.EmptyProfileEditor.route) {
                             inclusive = true
                         }
                     }

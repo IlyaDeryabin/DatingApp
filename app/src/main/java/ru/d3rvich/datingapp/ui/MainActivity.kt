@@ -15,10 +15,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import dagger.hilt.android.AndroidEntryPoint
+import ru.d3rvich.datingapp.ui.navigation.createExternalRouter
+import ru.d3rvich.datingapp.ui.screens.MainScreen
 import ru.d3rvich.datingapp.ui.screens.dialog.DIALOG_ID_KEY
 import ru.d3rvich.datingapp.ui.screens.dialog.DialogScreen
-import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListScreen
-import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListViewModel
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginViewModel
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorScreen
@@ -45,33 +45,33 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.LoginScreen.route
+                        startDestination = Screen.MainScreen.route
                     ) {
-                        composable(Screens.LoginScreen.route) {
+                        composable(Screen.MainScreen.route) {
+                            MainScreen(
+                                createExternalRouter { route, _ ->
+                                    navController.navigate(route)
+                                }
+                            )
+                        }
+                        composable(Screen.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()
                             LoginScreen(
                                 navController = navController,
                                 loginViewModel = loginViewModel
                             )
                         }
-                        composable(Screens.SignUpScreen.route) {
+                        composable(Screen.SignUpScreen.route) {
                             val signUpViewModel: SignUpViewModel by viewModels()
                             SignUpScreen(
                                 navController = navController,
                                 signUpViewModel = signUpViewModel
                             )
                         }
-                        composable(Screens.DialogListScreen.route) {
-                            val dialogListViewModel: DialogListViewModel by viewModels()
-                            DialogListScreen(
-                                navController = navController,
-                                viewModel = dialogListViewModel
-                            )
-                        }
-                        composable(Screens.DialogScreen.route + "/{$DIALOG_ID_KEY}") {
+                        composable(Screen.DialogScreen.route + "/{$DIALOG_ID_KEY}") {
                             DialogScreen(navController = navController)
                         }
-                        composable(Screens.EmptyProfileEditor.route) {
+                        composable(Screen.EmptyProfileEditor.route) {
                             val viewModel: ProfileEditorViewModel by viewModels()
                             ProfileEditorScreen(
                                 navController = navController,

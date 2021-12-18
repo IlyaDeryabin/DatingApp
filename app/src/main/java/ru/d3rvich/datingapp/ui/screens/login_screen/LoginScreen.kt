@@ -9,7 +9,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
-import ru.d3rvich.datingapp.ui.Screens
+import ru.d3rvich.datingapp.ui.Screen
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginAction
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginEvent
 import ru.d3rvich.datingapp.ui.screens.login_screen.views.LoginViewDisplay
@@ -22,8 +22,8 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
         loginViewModel.loginAction.collect { action ->
             when (action) {
                 is LoginAction.LoginSuccessful -> {
-                    navController.navigate(Screens.DialogListScreen.route) {
-                        popUpTo(Screens.LoginScreen.route) {
+                    navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.LoginScreen.route) {
                             inclusive = true
                         }
                     }
@@ -39,8 +39,8 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                     LoginEvent.PerformLogin(loginEntity)
                 )
             }, onSignUpClicked = {
-                navController.navigate(Screens.SignUpScreen.route) {
-                    popUpTo(Screens.LoginScreen.route) {
+                navController.navigate(Screen.SignUpScreen.route) {
+                    popUpTo(Screen.LoginScreen.route) {
                         inclusive = true
                     }
                 }
