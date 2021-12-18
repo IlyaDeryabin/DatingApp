@@ -23,6 +23,7 @@ import ru.d3rvich.datingapp.ui.navigation.Router
 import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListScreen
 import ru.d3rvich.datingapp.ui.screens.main.models.MainScreenState
 import ru.d3rvich.datingapp.ui.screens.main.views.Drawer
+import ru.d3rvich.datingapp.ui.screens.pair_search.PairSearchScreen
 
 @ExperimentalAnimationApi
 @ExperimentalCoilApi
@@ -93,7 +94,7 @@ fun MainScreen(router: Router) {
                         DialogListScreen(router = router, openDrawer = openDrawer)
                     }
                     composable(DrawerScreen.PairSearchScreen.route) {
-                        Text(text = "Pair Search")
+                        PairSearchScreen(openDrawer = openDrawer)
                     }
                 }
             }

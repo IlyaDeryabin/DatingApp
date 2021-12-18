@@ -21,6 +21,7 @@ import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginViewModel
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorScreen
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorViewModel
+import ru.d3rvich.datingapp.ui.screens.settings.SettingsScreen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpScreen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpViewModel
 import ru.d3rvich.datingapp.ui.theme.DatingAppTheme
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Screen.Settings.route) {
-                            Text(text = "Settings")
+                            SettingsScreen(onBackButtonClicked = { navController.popBackStack() })
                         }
                         composable("empty") {
                             Text("Empty")
