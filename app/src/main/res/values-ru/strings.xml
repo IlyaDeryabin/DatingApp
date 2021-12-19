@@ -64,4 +64,6 @@
     <string name="profile">Профиль</string>
     <string name="loading_error_message">Ошибка при загрузке данных</string>
     <string name="edit_profile">Редактирование профиля</string>
+    <string name="turn_on_dark_mode">Включить тёмную тему</string>
+    <string name="turn_on_light_mode">Включить светлую тему</string>
 </resources>

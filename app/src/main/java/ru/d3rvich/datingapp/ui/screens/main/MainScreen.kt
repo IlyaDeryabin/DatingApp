@@ -28,7 +28,7 @@ import ru.d3rvich.datingapp.ui.screens.pair_search.PairSearchScreen
 @ExperimentalAnimationApi
 @ExperimentalCoilApi
 @Composable
-fun MainScreen(router: Router) {
+fun MainScreen(router: Router, isDarkMode: Boolean, onDarkModeChanged: (Boolean) -> Unit) {
     val viewModel: MainViewModel = hiltViewModel()
     val navController = rememberNavController()
 
@@ -81,7 +81,9 @@ fun MainScreen(router: Router) {
                                 drawerState.close()
                             }
                             router.routeTo(Screen.ProfileScreen.route)
-                        }
+                        },
+                        isDarkMode = isDarkMode,
+                        onDarkModeChange = onDarkModeChanged
                     )
                 },
                 gesturesEnabled = true
