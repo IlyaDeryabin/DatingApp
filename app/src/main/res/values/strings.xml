@@ -66,4 +66,5 @@
     <string name="edit_profile">Edit profile</string>
     <string name="turn_on_dark_mode">Turn on dark mode</string>
     <string name="turn_on_light_mode">Turn on light mode</string>
+    <string name="send_message">Send message</string>
 </resources>

@@ -4,4 +4,5 @@ import ru.d3rvich.datingapp.domain.entity.MessageEntity
 
 sealed class DialogEvent {
     class SendMessage(val message: MessageEntity): DialogEvent()
+    object ReloadData: DialogEvent()
 }
