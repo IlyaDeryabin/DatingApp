@@ -19,4 +19,6 @@ interface DatingInteractor {
     suspend fun getDialogBy(id: String): DialogEntity
 
     suspend fun saveUserProfile(profileEntity: ProfileEntity): Boolean
+
+    suspend fun getUserProfile(): ProfileEntity
 }

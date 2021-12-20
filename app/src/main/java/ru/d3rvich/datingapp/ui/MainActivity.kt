@@ -5,24 +5,28 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import dagger.hilt.android.AndroidEntryPoint
+import ru.d3rvich.datingapp.ui.navigation.createExternalRouter
+import ru.d3rvich.datingapp.ui.screens.main.MainScreen
 import ru.d3rvich.datingapp.ui.screens.dialog.DIALOG_ID_KEY
 import ru.d3rvich.datingapp.ui.screens.dialog.DialogScreen
-import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListScreen
-import ru.d3rvich.datingapp.ui.screens.dialog_list.DialogListViewModel
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginViewModel
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorScreen
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorViewModel
+import ru.d3rvich.datingapp.ui.screens.settings.SettingsScreen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpScreen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpViewModel
 import ru.d3rvich.datingapp.ui.theme.DatingAppTheme
@@ -39,44 +43,65 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DatingAppTheme {
+            val isDarkModeValue = isSystemInDarkTheme()
+
+            var isDarkMode by remember {
+                mutableStateOf(isDarkModeValue)
+            }
+
+            DatingAppTheme(isDarkMode) {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.LoginScreen.route
+                        startDestination = Screen.MainScreen.route
                     ) {
-                        composable(Screens.LoginScreen.route) {
+                        composable(Screen.MainScreen.route) {
+                            MainScreen(
+                                router = createExternalRouter { route, _ ->
+                                    navController.navigate(route)
+                                },
+                                isDarkMode = isDarkMode,
+                                onDarkModeChanged = { mode ->
+                                    isDarkMode = mode
+                                }
+                            )
+                        }
+                        composable(Screen.LoginScreen.route) {
                             val loginViewModel: LoginViewModel by viewModels()
                             LoginScreen(
                                 navController = navController,
                                 loginViewModel = loginViewModel
                             )
                         }
-                        composable(Screens.SignUpScreen.route) {
+                        composable(Screen.SignUpScreen.route) {
                             val signUpViewModel: SignUpViewModel by viewModels()
                             SignUpScreen(
                                 navController = navController,
                                 signUpViewModel = signUpViewModel
                             )
                         }
-                        composable(Screens.DialogListScreen.route) {
-                            val dialogListViewModel: DialogListViewModel by viewModels()
-                            DialogListScreen(
-                                navController = navController,
-                                viewModel = dialogListViewModel
-                            )
-                        }
-                        composable(Screens.DialogScreen.route + "/{$DIALOG_ID_KEY}") {
+                        composable(Screen.DialogScreen.route + "/{$DIALOG_ID_KEY}") {
                             DialogScreen(navController = navController)
                         }
-                        composable(Screens.EmptyProfileEditor.route) {
+                        composable(Screen.ProfileScreen.route) {
+                            Column {
+                                Text(text = "Profile view")
+                                Button(onClick = { navController.navigate(Screen.EmptyProfileEditor.route) }) {
+                                    Text(text = "Edit profile")
+                                }
+                            }
+                        }
+                        composable(Screen.EmptyProfileEditor.route) {
                             val viewModel: ProfileEditorViewModel by viewModels()
                             ProfileEditorScreen(
                                 navController = navController,
                                 viewModel = viewModel
                             )
+                        }
+                        composable(Screen.Settings.route) {
+                            SettingsScreen(onBackButtonClicked = { navController.popBackStack() })
                         }
                         composable("empty") {
                             Text("Empty")

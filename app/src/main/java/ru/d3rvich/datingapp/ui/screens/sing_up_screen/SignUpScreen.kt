@@ -8,7 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
-import ru.d3rvich.datingapp.ui.Screens
+import ru.d3rvich.datingapp.ui.Screen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpAction
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpEvent
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.views.SignUpDisplay
@@ -21,15 +21,15 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel)
         signUpViewModel.signUpAction.collect { action ->
             when (action) {
                 is SignUpAction.SignUpSuccessful -> {
-                    navController.navigate(Screens.DialogListScreen.route) {
-                        popUpTo(Screens.SignUpScreen.route) {
+                    navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.SignUpScreen.route) {
                             inclusive = true
                         }
                     }
                 }
                 is SignUpAction.NavigateToLoginScreen -> {
-                    navController.navigate(Screens.LoginScreen.route) {
-                        popUpTo(Screens.SignUpScreen.route) {
+                    navController.navigate(Screen.LoginScreen.route) {
+                        popUpTo(Screen.SignUpScreen.route) {
                             inclusive = true
                         }
                     }
