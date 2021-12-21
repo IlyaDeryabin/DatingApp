@@ -28,9 +28,9 @@ fun DialogScreen(navController: NavController, viewModel: DialogViewModel = hilt
                 messages = state.dialog.messages,
                 onSendMessage = { newMessage ->
                     val message = MessageEntity(
-                        senderId = state.dialog.companion.id,
-                        massage = newMessage,
-                        dispatchTime = ""
+                        isMine = true,
+                        text = newMessage,
+                        dispatchTime = "now"
                     )
                     onSendMessage(message)
                 },

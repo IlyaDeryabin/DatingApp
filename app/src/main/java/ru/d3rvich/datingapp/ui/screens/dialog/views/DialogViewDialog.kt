@@ -95,7 +95,7 @@ private fun Messages(modifier: Modifier = Modifier, messages: List<MessageEntity
         state = lazyListState
     ) {
         items(messages) { message ->
-            MessageView(message = message.massage, isMine = true)
+            MessageView(message = message)
         }
         scope.launch {
             lazyListState.scrollToItem(messages.lastIndex)
@@ -113,9 +113,9 @@ fun DialogViewDialogPreviewNoMessages() {
 @Composable
 fun DialogViewDialogPreview() {
     val messages = listOf(
-        MessageEntity("", "Привет", ""),
-        MessageEntity("", "Нет", ""),
-        MessageEntity("", "Ладно", "")
+        MessageEntity(true, "Привет", "1ч"),
+        MessageEntity(false, "Нет", "30мин"),
+        MessageEntity(true, "Ладно(", "2мин")
     )
     DialogViewDialog("Кетя", messages, {}, {})
 }

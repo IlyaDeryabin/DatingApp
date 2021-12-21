@@ -11,7 +11,7 @@ class DialogRepositoryImpl : DialogRepository {
     override suspend fun getDialogList(): List<DialogListItemEntity> {
         delay(1000)
         val photoLink = "https://picsum.photos/300/300"
-        val messageEntity = MessageEntity("0", "Привет", "")
+        val messageEntity = MessageEntity(false, "Привет", "")
         return listOf(
             DialogListItemEntity("0", "Роман", photoLink, messageEntity),
             DialogListItemEntity("1", "Олег", photoLink, messageEntity),

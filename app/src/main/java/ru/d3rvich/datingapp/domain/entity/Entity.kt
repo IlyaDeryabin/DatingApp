@@ -20,7 +20,7 @@ data class DialogEntity(
     val messages: List<MessageEntity>
 )
 
-data class MessageEntity(val senderId: String, val massage: String, val dispatchTime: String)
+data class MessageEntity(val isMine: Boolean, val text: String, val dispatchTime: String)
 
 data class ProfileEntity(
     val name: String,
