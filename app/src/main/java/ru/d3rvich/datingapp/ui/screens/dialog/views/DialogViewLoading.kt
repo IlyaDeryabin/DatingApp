@@ -8,9 +8,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
+import androidx.compose.ui.res.stringResource
+import ru.d3rvich.datingapp.R
 
 @Composable
 fun DialogViewLoading(onBackPressed: () -> Unit) {
@@ -18,16 +17,11 @@ fun DialogViewLoading(onBackPressed: () -> Unit) {
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = "Content to display",
-                    modifier = Modifier.placeholder(
-                        visible = true,
-                        highlight = PlaceholderHighlight.shimmer(),
-                        color = MaterialTheme.colors.primary
-                    )
+                    text = stringResource(id = R.string.loading)
                 )
             }, navigationIcon = {
                 IconButton(onClick = onBackPressed) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
                 }
             })
         }) {

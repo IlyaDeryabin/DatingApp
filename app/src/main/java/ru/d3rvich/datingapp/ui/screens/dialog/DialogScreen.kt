@@ -9,7 +9,6 @@ import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogViewState
 import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewDialog
 import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewError
 import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewLoading
-import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewNoMessages
 
 @Composable
 fun DialogScreen(navController: NavController, viewModel: DialogViewModel = hiltViewModel()) {
@@ -22,20 +21,6 @@ fun DialogScreen(navController: NavController, viewModel: DialogViewModel = hilt
     when (val state = viewModel.viewState.value) {
         DialogViewState.Loading -> {
             DialogViewLoading(onBackPressed = onBackPressed)
-        }
-        is DialogViewState.NoMessages -> {
-            DialogViewNoMessages(
-                companion = state.dialog.companion.name,
-                onSendMessage = { newMessage ->
-                    val message = MessageEntity(
-                        senderId = state.dialog.companion.id,
-                        massage = newMessage,
-                        dispatchTime = ""
-                    )
-                    onSendMessage(message)
-                },
-                onBackPressed = onBackPressed
-            )
         }
         is DialogViewState.Dialog -> {
             DialogViewDialog(

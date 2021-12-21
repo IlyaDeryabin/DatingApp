@@ -9,8 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.ui.base.EventHandler
-import ru.d3rvich.datingapp.ui.mappers.toDialogEntity
-import ru.d3rvich.datingapp.ui.mappers.toEmptyDialogUiModel
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogEvent
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogViewState
 import javax.inject.Inject
@@ -41,9 +39,6 @@ class DialogViewModel @Inject constructor(
             is DialogViewState.Error -> {
                 reduce(event, currentState)
             }
-            is DialogViewState.NoMessages -> {
-                reduce(event, currentState)
-            }
             is DialogViewState.Dialog -> {
                 reduce(event, currentState)
             }
@@ -55,11 +50,7 @@ class DialogViewModel @Inject constructor(
             _viewState.value = DialogViewState.Loading
             try {
                 val dialog = interactor.getDialogBy(dialogId)
-                if (dialog.messages.isEmpty()) {
-                    _viewState.value = DialogViewState.NoMessages(dialog.toEmptyDialogUiModel())
-                } else {
-                    _viewState.value = DialogViewState.Dialog(dialog)
-                }
+                _viewState.value = DialogViewState.Dialog(dialog)
             } catch (e: Exception) {
                 _viewState.value = DialogViewState.Error("")
             }
@@ -76,16 +67,6 @@ class DialogViewModel @Inject constructor(
             else -> {
                 error("Illegal $event for this $state.")
             }
-        }
-    }
-
-    private fun reduce(event: DialogEvent, state: DialogViewState.NoMessages) {
-        when (event) {
-            is DialogEvent.SendMessage -> {
-                _viewState.value =
-                    DialogViewState.Dialog(state.dialog.toDialogEntity(listOf(event.message)))
-            }
-            else -> error("Illegal $event for this $state.")
         }
     }
 
