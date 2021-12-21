@@ -21,6 +21,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -28,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.AuthEntity
-import ru.d3rvich.datingapp.ui.common.FocusBox
 import ru.d3rvich.datingapp.ui.common.PasswordField
 import ru.d3rvich.datingapp.ui.common.PhoneNumberField
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginViewState
@@ -53,11 +53,12 @@ fun LoginViewDisplay(
     val isPhoneNumberValid: Boolean = phoneNumber.isNotBlank() && phoneNumber.length == 10
     val isTextFieldsEnable: Boolean = state is LoginViewState.Login
 
-    FocusBox(
+    Box(
         modifier = Modifier
             .fillMaxHeight(0.8f)
             .fillMaxWidth()
-    ) { focusManager ->
+    ) {
+        val focusManager = LocalFocusManager.current
         Text(text = stringResource(id = R.string.sign_up), modifier = Modifier
             .padding(8.dp)
             .clickable {

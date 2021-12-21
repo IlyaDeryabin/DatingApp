@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import ru.d3rvich.datingapp.R
-import ru.d3rvich.datingapp.ui.common.FocusBox
 import ru.d3rvich.datingapp.ui.common.PasswordField
 import ru.d3rvich.datingapp.ui.common.PhoneNumberField
+import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.model.SingUpUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 
@@ -32,7 +32,9 @@ fun SignUpDisplay(
     onSignUpButtonClicked: (SingUpUiModel) -> Unit,
     onLoginButtonClicked: () -> Unit
 ) {
-    FocusBox(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .clearFocusOnClick()) {
         Text(text = stringResource(id = R.string.log_in),
             modifier = Modifier
                 .padding(8.dp)

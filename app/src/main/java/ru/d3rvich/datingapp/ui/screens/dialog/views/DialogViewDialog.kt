@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,9 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.R
@@ -49,27 +48,27 @@ fun DialogViewDialog(
             } else {
                 Messages(messages = messages, modifier = Modifier.weight(1f))
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                var text by rememberSaveable {
-                    mutableStateOf("")
-                }
-                TextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(8.dp))
-                )
-                IconButton(onClick = {
-                    onSendMessage(text)
-                    text = ""
-                }, enabled = text.isNotBlank()) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = stringResource(id = R.string.send_message)
-                    )
-                }
+            var text by rememberSaveable {
+                mutableStateOf("")
             }
+            TextField(
+                value = text,
+                onValueChange = { text = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 2.dp),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        onSendMessage(text)
+                        text = ""
+                    }, enabled = text.isNotBlank()) {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = stringResource(id = R.string.send_message)
+                        )
+                    }
+                }
+            )
         }
     }
 }
@@ -103,3 +102,21 @@ private fun Messages(modifier: Modifier = Modifier, messages: List<MessageEntity
         }
     }
 }
+
+@Preview(showBackground = true, name = "No messages")
+@Composable
+fun DialogViewDialogPreviewNoMessages() {
+    DialogViewDialog("Кетя", emptyList(), {}, {})
+}
+
+@Preview(showBackground = true, name = "Default")
+@Composable
+fun DialogViewDialogPreview() {
+    val messages = listOf(
+        MessageEntity("", "Привет", ""),
+        MessageEntity("", "Нет", ""),
+        MessageEntity("", "Ладно", "")
+    )
+    DialogViewDialog("Кетя", messages, {}, {})
+}
+
