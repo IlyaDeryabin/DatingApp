@@ -6,9 +6,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.ui.base.EventHandler
+import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogAction
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogEvent
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogViewState
 import javax.inject.Inject
@@ -23,6 +27,9 @@ class DialogViewModel @Inject constructor(
     private val _viewState = mutableStateOf<DialogViewState>(DialogViewState.Loading)
     val viewState: State<DialogViewState>
         get() = _viewState
+
+    private val _action = MutableSharedFlow<DialogAction>()
+    val action: SharedFlow<DialogAction> = _action.asSharedFlow()
 
     private val dialogId: String = savedStateHandle.get<String>(DIALOG_ID_KEY)
         ?: error("Параметр Dialog ID не был добавлен в BackStackEntry")
@@ -58,12 +65,22 @@ class DialogViewModel @Inject constructor(
     }
 
     private fun reduce(event: DialogEvent, state: DialogViewState.Loading) {
-        error("Illegal $event for this $state.")
+        when (event) {
+            DialogEvent.BackPressed -> {
+                setAction(DialogAction.PopBackStack)
+            }
+            else -> {
+                error("Illegal $event for this $state.")
+            }
+        }
     }
 
     private fun reduce(event: DialogEvent, state: DialogViewState.Error) {
         when (event) {
             DialogEvent.ReloadData -> collectDialog()
+            DialogEvent.BackPressed -> {
+                setAction(DialogAction.PopBackStack)
+            }
             else -> {
                 error("Illegal $event for this $state.")
             }
@@ -78,7 +95,19 @@ class DialogViewModel @Inject constructor(
                 messages.add(event.message)
                 _viewState.value = state.copy(dialog = dialog.copy(messages = messages))
             }
+            DialogEvent.CompanionClicked -> {
+                setAction(DialogAction.NavigateToCompanion)
+            }
+            DialogEvent.BackPressed -> {
+                setAction(DialogAction.PopBackStack)
+            }
             else -> error("Illegal $event for this $state.")
+        }
+    }
+
+    private fun setAction(action: DialogAction) {
+        viewModelScope.launch {
+            _action.emit(action)
         }
     }
 }

@@ -6,9 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalFocusManager
 
-fun Modifier.clearFocusOnClick() = composed {
+fun Modifier.clearFocusOnClick(): Modifier = composed {
     val focusManager = LocalFocusManager.current
-    this.clickable(MutableInteractionSource(), indication = null) {
+    return@composed this.clickable(MutableInteractionSource(), indication = null) {
         focusManager.clearFocus()
     }
 }

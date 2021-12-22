@@ -30,7 +30,7 @@ class DialogRepositoryImpl : DialogRepository {
 
     override suspend fun getDialogBy(id: String): DialogEntity {
         delay(1000)
-        val userEntity = UserEntity("1", "Роман", "")
+        val userEntity = UserEntity("1", "Роман", "https://picsum.photos/300/300")
         return DialogEntity(id, userEntity, emptyList())
     }
 }

@@ -68,4 +68,8 @@
     <string name="turn_on_light_mode">Turn on light mode</string>
     <string name="send_message">Send message</string>
     <string name="loading">Loading…</string>
+    <string name="message">Message</string>
+    <string name="no_messages">It looks like there are no messages. You can fix it.</string>
+    <string name="delete">Delete</string>
+    <string name="block_user">Block user</string>
 </resources>

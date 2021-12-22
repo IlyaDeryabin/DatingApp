@@ -68,4 +68,8 @@
     <string name="turn_on_light_mode">Включить светлую тему</string>
     <string name="send_message">Отправить сообщение</string>
     <string name="loading">Загрузка…</string>
+    <string name="message">Сообщение</string>
+    <string name="no_messages">Похоже, что сообщений нет. Это нужно исправить.</string>
+    <string name="delete">Удалить</string>
+    <string name="block_user">Заблокировать</string>
 </resources>
