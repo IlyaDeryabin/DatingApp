@@ -165,7 +165,8 @@ private fun InputField(onSendMessage: (String) -> Unit) {
         keyboardActions = KeyboardActions(onSend = {
             onSendMessage(text)
             text = ""
-        })
+        }),
+        colors = TextFieldDefaults.textFieldColors(trailingIconColor = MaterialTheme.colors.primary)
     )
 }
 

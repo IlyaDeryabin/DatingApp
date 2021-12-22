@@ -19,9 +19,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.insets.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.d3rvich.datingapp.ui.navigation.createExternalRouter
 import ru.d3rvich.datingapp.ui.screens.main.MainScreen
@@ -56,6 +55,10 @@ class MainActivity : ComponentActivity() {
             }
 
             DatingAppTheme(isDarkMode) {
+                val systemUiController = rememberSystemUiController()
+                systemUiController.setStatusBarColor(
+                    color = MaterialTheme.colors.primaryVariant
+                )
                 ProvideWindowInsets {
                     Surface(
                         color = MaterialTheme.colors.background,
