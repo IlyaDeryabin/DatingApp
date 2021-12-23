@@ -1,9 +1,11 @@
 package ru.d3rvich.datingapp.ui.screens.dialog_list
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -17,10 +19,7 @@ import ru.d3rvich.datingapp.ui.navigation.Router
 import ru.d3rvich.datingapp.ui.screens.dialog_list.models.DialogListAction
 import ru.d3rvich.datingapp.ui.screens.dialog_list.models.DialogListEvent
 import ru.d3rvich.datingapp.ui.screens.dialog_list.models.DialogListViewState
-import ru.d3rvich.datingapp.ui.screens.dialog_list.views.DialogListLoading
-import ru.d3rvich.datingapp.ui.screens.dialog_list.views.DialogListViewDisplay
-import ru.d3rvich.datingapp.ui.screens.dialog_list.views.DialogListViewError
-import ru.d3rvich.datingapp.ui.screens.dialog_list.views.DialogListViewNoItems
+import ru.d3rvich.datingapp.ui.screens.dialog_list.views.*
 
 @ExperimentalCoilApi
 @Composable
@@ -31,13 +30,24 @@ fun DialogListScreen(
 ) {
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = {
-                Text(text = stringResource(id = DrawerScreen.DialogListScreen.titleResId))
-            }, navigationIcon = {
-                IconButton(onClick = { openDrawer() }) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Open drawer")
-                }
-            })
+            if (dialogListViewModel.dialogListViewState.value !is DialogListViewState.Search) {
+                TopAppBar(title = {
+                    Text(text = stringResource(id = DrawerScreen.DialogListScreen.titleResId))
+                }, navigationIcon = {
+                    IconButton(onClick = { openDrawer() }) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Open drawer")
+                    }
+                }, actions = {
+                    AnimatedVisibility(
+                        visible =
+                        dialogListViewModel.dialogListViewState.value is DialogListViewState.DialogList
+                    ) {
+                        IconButton(onClick = { dialogListViewModel.obtainEvent(DialogListEvent.SearchButtonClicked) }) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                        }
+                    }
+                })
+            }
         }) {
         when (val viewState = dialogListViewModel.dialogListViewState.value) {
             DialogListViewState.Idle -> {
@@ -48,9 +58,22 @@ fun DialogListScreen(
                 })
             DialogListViewState.EmptyList -> DialogListViewNoItems()
             is DialogListViewState.Error -> DialogListViewError {
-                dialogListViewModel.obtainEvent(DialogListEvent.LoadContent)
+                dialogListViewModel.obtainEvent(DialogListEvent.ReloadContent)
             }
             DialogListViewState.Loading -> DialogListLoading()
+            is DialogListViewState.Search -> DialogListViewSearch(
+                text = viewState.text,
+                onTextChange = { text ->
+                    dialogListViewModel.obtainEvent(DialogListEvent.OnSearchFieldChanged(text))
+                },
+                onItemClicked = { dialogId ->
+                    dialogListViewModel.obtainEvent(DialogListEvent.DialogSelected(dialogId))
+                },
+                onBackPressed = {
+                    dialogListViewModel.obtainEvent(DialogListEvent.OnCloseSearch)
+                },
+                dialogs = viewState.dialogs
+            )
         }
     }
 
@@ -58,9 +81,6 @@ fun DialogListScreen(
         dialogListViewModel.obtainEvent(DialogListEvent.EnterScreen)
         dialogListViewModel.dialogListAction.collect { action ->
             when (action) {
-                DialogListAction.NavigateToPairMatch -> {
-                    router?.routeTo(DrawerScreen.PairSearchScreen.route)
-                }
                 is DialogListAction.NavigateToDialog -> {
                     router?.routeTo(Screen.DialogScreen.route + "/${action.dialogId}")
                 }
