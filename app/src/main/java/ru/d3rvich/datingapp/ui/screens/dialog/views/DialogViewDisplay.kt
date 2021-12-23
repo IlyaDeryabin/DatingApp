@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -72,7 +73,7 @@ private fun TopBar(
     TopAppBar(
         title = {
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxHeight()
                     .clip(CircleShape)
                     .clickable(
@@ -115,7 +116,10 @@ private fun TopBar(
                     contentDescription = "Show menu"
                 )
             }
-            DropdownMenu(expanded = menuVisible, onDismissRequest = { menuVisible = false }) {
+            DropdownMenu(
+                expanded = menuVisible,
+                onDismissRequest = { menuVisible = false }
+            ) {
                 DropdownMenuItem(onClick = { }) {
                     val text = stringResource(id = R.string.delete)
                     Icon(imageVector = Icons.Default.Delete, contentDescription = text)
@@ -161,7 +165,10 @@ private fun InputField(onSendMessage: (String) -> Unit) {
         placeholder = {
             Text(text = stringResource(id = R.string.message))
         },
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Send),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Send,
+            capitalization = KeyboardCapitalization.Sentences
+        ),
         keyboardActions = KeyboardActions(onSend = {
             onSendMessage(text)
             text = ""

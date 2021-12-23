@@ -1,5 +1,7 @@
 package ru.d3rvich.datingapp.domain.entity
 
+import kotlinx.coroutines.flow.Flow
+
 /**
  * Data классы-сущности domain слоя
  * */

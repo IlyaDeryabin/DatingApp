@@ -6,9 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.ui.base.EventHandler
@@ -56,8 +54,16 @@ class DialogViewModel @Inject constructor(
         viewModelScope.launch {
             _viewState.value = DialogViewState.Loading
             try {
-                val dialog = interactor.getDialogBy(dialogId)
-                _viewState.value = DialogViewState.Dialog(dialog)
+                val dialogEntity = interactor.getDialogBy(dialogId)
+                _viewState.value = DialogViewState.Dialog(dialog = dialogEntity)
+                interactor.getDialogFlow(dialogId).collect { newMessage ->
+                    val currentState = _viewState.value as DialogViewState.Dialog
+                    val currentDialog = currentState.dialog
+                    val newList = currentState.dialog.messages as MutableList
+                    newList.add(newMessage)
+                    _viewState.value =
+                        DialogViewState.Dialog(dialog = currentDialog.copy(messages = newList))
+                }
             } catch (e: Exception) {
                 _viewState.value = DialogViewState.Error("")
             }
@@ -94,6 +100,9 @@ class DialogViewModel @Inject constructor(
                 val messages = dialog.messages.toMutableList()
                 messages.add(event.message)
                 _viewState.value = state.copy(dialog = dialog.copy(messages = messages))
+                viewModelScope.launch {
+                    interactor.sendMessage(state.dialog.dialogId, event.message)
+                }
             }
             DialogEvent.CompanionClicked -> {
                 setAction(DialogAction.NavigateToCompanion)

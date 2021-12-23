@@ -59,7 +59,11 @@ class MainActivity : ComponentActivity() {
                 systemUiController.setStatusBarColor(
                     color = MaterialTheme.colors.primaryVariant
                 )
-                ProvideWindowInsets {
+                systemUiController.setNavigationBarColor(
+                    color = MaterialTheme.colors.background,
+                    darkIcons = !isDarkMode
+                )
+                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     Surface(
                         color = MaterialTheme.colors.background,
                         modifier = Modifier
