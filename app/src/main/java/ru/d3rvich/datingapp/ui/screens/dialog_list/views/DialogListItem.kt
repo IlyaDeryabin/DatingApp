@@ -62,7 +62,7 @@ fun DialogListItem(dialogListItemEntity: DialogListItemEntity, onItemClicked: (S
                 ) {
                     Text(text = dialogListItemEntity.userName, style = MaterialTheme.typography.h6)
                     Text(
-                        text = dialogListItemEntity.lastMassage.massage,
+                        text = dialogListItemEntity.lastMassage.text,
                         style = MaterialTheme.typography.body2,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -84,7 +84,7 @@ fun DialogListItem(dialogListItemEntity: DialogListItemEntity, onItemClicked: (S
 @Preview(showBackground = true)
 @Composable
 fun DialogListItemPreview() {
-    val messageEntity = MessageEntity("0", "Привет. Почему одна? Сейчас будет два.", "")
+    val messageEntity = MessageEntity(false, "Привет.", "")
     val dialogListItemEntity = DialogListItemEntity(
         "0",
         "Роман",

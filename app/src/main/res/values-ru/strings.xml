@@ -66,4 +66,14 @@
     <string name="edit_profile">Редактирование профиля</string>
     <string name="turn_on_dark_mode">Включить тёмную тему</string>
     <string name="turn_on_light_mode">Включить светлую тему</string>
+    <string name="send_message">Отправить сообщение</string>
+    <string name="loading">Загрузка…</string>
+    <string name="message">Сообщение</string>
+    <string name="no_messages">Похоже, что сообщений нет. Это нужно исправить.</string>
+    <string name="delete">Удалить</string>
+    <string name="block_user">Заблокировать</string>
+    <string name="search_placeholder_text">Кого ищем?</string>
+    <string name="turn_back">Вернуться</string>
+    <string name="no_results">Нет результатов</string>
+    <string name="clear">Очистить</string>
 </resources>

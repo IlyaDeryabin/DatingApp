@@ -1,9 +1,7 @@
 package ru.d3rvich.datingapp.domain.interactor
 
-import ru.d3rvich.datingapp.domain.entity.AuthEntity
-import ru.d3rvich.datingapp.domain.entity.DialogEntity
-import ru.d3rvich.datingapp.domain.entity.DialogListItemEntity
-import ru.d3rvich.datingapp.domain.entity.ProfileEntity
+import kotlinx.coroutines.flow.Flow
+import ru.d3rvich.datingapp.domain.entity.*
 
 /**
  * Класс бизнес-логики приложения
@@ -17,6 +15,10 @@ interface DatingInteractor {
     suspend fun getDialogList(): List<DialogListItemEntity>
 
     suspend fun getDialogBy(id: String): DialogEntity
+
+    suspend fun sendMessage(id: String, messageEntity: MessageEntity)
+
+    suspend fun getDialogFlow(dialogId: String) : Flow<MessageEntity>
 
     suspend fun saveUserProfile(profileEntity: ProfileEntity): Boolean
 

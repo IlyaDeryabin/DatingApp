@@ -1,44 +1,66 @@
 package ru.d3rvich.datingapp.ui.screens.dialog
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.collect
+import ru.d3rvich.datingapp.domain.entity.MessageEntity
+import ru.d3rvich.datingapp.ui.Screen
+import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogAction
+import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogEvent
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogViewState
+import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewDisplay
+import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewError
+import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewLoading
 
 @Composable
 fun DialogScreen(navController: NavController, viewModel: DialogViewModel = hiltViewModel()) {
+    val onSendMessage: (MessageEntity) -> Unit = { message ->
+        viewModel.obtainEvent(DialogEvent.SendMessage(message = message))
+    }
+    val onBackPressed: () -> Unit = {
+        viewModel.obtainEvent(DialogEvent.BackPressed)
+    }
     when (val state = viewModel.viewState.value) {
         DialogViewState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+            DialogViewLoading(onBackPressed = onBackPressed)
         }
-        DialogViewState.NoMessages -> TODO()
         is DialogViewState.Dialog -> {
-            Scaffold(modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(title = { Text(text = "Собеседник") },
-                        navigationIcon = {
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = "Arrow back"
-                                )
-                            }
-                        })
-                }) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Text(text = "DialogID: ${state.dialog.dialogId}")
+            DialogViewDisplay(
+                companion = state.dialog.companion,
+                messages = state.dialog.messages,
+                onSendMessage = { newMessage ->
+                    val message = MessageEntity(
+                        isMine = true,
+                        text = newMessage,
+                        dispatchTime = "now"
+                    )
+                    onSendMessage(message)
+                },
+                onBackPressed = onBackPressed,
+                onCompanionClicked = {
+                    viewModel.obtainEvent(DialogEvent.CompanionClicked)
+                }
+            )
+        }
+        is DialogViewState.Error -> DialogViewError(
+            onBackClicked = onBackPressed,
+            onReloadButtonClicked = {
+                viewModel.obtainEvent(DialogEvent.ReloadData)
+            })
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.action.collect { action ->
+            when (action) {
+                DialogAction.NavigateToCompanion -> {
+                    navController.navigate(Screen.ProfileScreen.route)
+                }
+                DialogAction.PopBackStack -> {
+                    navController.popBackStack()
                 }
             }
         }
-        is DialogViewState.Error -> TODO()
     }
 }

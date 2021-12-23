@@ -6,9 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.ui.base.EventHandler
+import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogAction
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogEvent
 import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogViewState
 import javax.inject.Inject
@@ -24,16 +26,97 @@ class DialogViewModel @Inject constructor(
     val viewState: State<DialogViewState>
         get() = _viewState
 
+    private val _action = MutableSharedFlow<DialogAction>()
+    val action: SharedFlow<DialogAction> = _action.asSharedFlow()
+
+    private val dialogId: String = savedStateHandle.get<String>(DIALOG_ID_KEY)
+        ?: error("Параметр Dialog ID не был добавлен в BackStackEntry")
+
     init {
-        val dialogId: String = savedStateHandle.get<String>(DIALOG_ID_KEY)
-            ?: error("Параметр Dialog ID не был добавлен в BackStackEntry")
-        viewModelScope.launch {
-            val dialog = interactor.getDialogBy(dialogId)
-            _viewState.value = DialogViewState.Dialog(dialog)
-        }
+        collectDialog()
     }
 
     override fun obtainEvent(event: DialogEvent) {
-        TODO("Not yet implemented")
+        when (val currentState = _viewState.value) {
+            is DialogViewState.Loading -> {
+                reduce(event, currentState)
+            }
+            is DialogViewState.Error -> {
+                reduce(event, currentState)
+            }
+            is DialogViewState.Dialog -> {
+                reduce(event, currentState)
+            }
+        }
+    }
+
+    private fun collectDialog() {
+        viewModelScope.launch {
+            _viewState.value = DialogViewState.Loading
+            try {
+                val dialogEntity = interactor.getDialogBy(dialogId)
+                _viewState.value = DialogViewState.Dialog(dialog = dialogEntity)
+                interactor.getDialogFlow(dialogId).collect { newMessage ->
+                    val currentState = _viewState.value as DialogViewState.Dialog
+                    val currentDialog = currentState.dialog
+                    val newList = currentState.dialog.messages as MutableList
+                    newList.add(newMessage)
+                    _viewState.value =
+                        DialogViewState.Dialog(dialog = currentDialog.copy(messages = newList))
+                }
+            } catch (e: Exception) {
+                _viewState.value = DialogViewState.Error("")
+            }
+        }
+    }
+
+    private fun reduce(event: DialogEvent, state: DialogViewState.Loading) {
+        when (event) {
+            DialogEvent.BackPressed -> {
+                setAction(DialogAction.PopBackStack)
+            }
+            else -> {
+                error("Illegal $event for this $state.")
+            }
+        }
+    }
+
+    private fun reduce(event: DialogEvent, state: DialogViewState.Error) {
+        when (event) {
+            DialogEvent.ReloadData -> collectDialog()
+            DialogEvent.BackPressed -> {
+                setAction(DialogAction.PopBackStack)
+            }
+            else -> {
+                error("Illegal $event for this $state.")
+            }
+        }
+    }
+
+    private fun reduce(event: DialogEvent, state: DialogViewState.Dialog) {
+        when (event) {
+            is DialogEvent.SendMessage -> {
+                val dialog = state.dialog
+                val messages = dialog.messages.toMutableList()
+                messages.add(event.message)
+                _viewState.value = state.copy(dialog = dialog.copy(messages = messages))
+                viewModelScope.launch {
+                    interactor.sendMessage(state.dialog.dialogId, event.message)
+                }
+            }
+            DialogEvent.CompanionClicked -> {
+                setAction(DialogAction.NavigateToCompanion)
+            }
+            DialogEvent.BackPressed -> {
+                setAction(DialogAction.PopBackStack)
+            }
+            else -> error("Illegal $event for this $state.")
+        }
+    }
+
+    private fun setAction(action: DialogAction) {
+        viewModelScope.launch {
+            _action.emit(action)
+        }
     }
 }

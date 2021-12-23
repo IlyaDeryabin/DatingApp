@@ -28,7 +28,7 @@ fun DialogListViewDisplay(
 @Preview(showBackground = true)
 @Composable
 fun DialogListViewDisplayPreview() {
-    val messageEntity = MessageEntity("0", "Привет", "")
+    val messageEntity = MessageEntity(false, "Привет", "")
     val dialogs = listOf(
         DialogListItemEntity("0", "Роман", "", messageEntity),
         DialogListItemEntity("1", "Олег", "", messageEntity),

@@ -66,4 +66,14 @@
     <string name="edit_profile">Edit profile</string>
     <string name="turn_on_dark_mode">Turn on dark mode</string>
     <string name="turn_on_light_mode">Turn on light mode</string>
+    <string name="send_message">Send message</string>
+    <string name="loading">Loading…</string>
+    <string name="message">Message</string>
+    <string name="no_messages">It looks like there are no messages. You can fix it.</string>
+    <string name="delete">Delete</string>
+    <string name="block_user">Block user</string>
+    <string name="search_placeholder_text">Who are we looking for?</string>
+    <string name="turn_back">Turn back</string>
+    <string name="no_results">No results</string>
+    <string name="clear">Clear</string>
 </resources>
