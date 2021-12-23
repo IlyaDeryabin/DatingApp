@@ -72,4 +72,8 @@
     <string name="no_messages">Похоже, что сообщений нет. Это нужно исправить.</string>
     <string name="delete">Удалить</string>
     <string name="block_user">Заблокировать</string>
+    <string name="search_placeholder_text">Кого ищем?</string>
+    <string name="turn_back">Вернуться</string>
+    <string name="no_results">Нет результатов</string>
+    <string name="clear">Очистить</string>
 </resources>

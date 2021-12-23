@@ -36,7 +36,11 @@ class DialogRepositoryImpl : DialogRepository {
         delay(500)
         val userEntity = UserEntity("1", "Роман", "https://picsum.photos/300/300")
         currentDialogMessageFlow = MutableSharedFlow()
-        return DialogEntity(id, userEntity, emptyList())
+        return DialogEntity(
+            id,
+            userEntity,
+            listOf(MessageEntity(isMine = false, text = "Привет", dispatchTime = "now"))
+        )
     }
 
     override suspend fun sendMessage(dialogId: String, messageEntity: MessageEntity): Result<Unit> {

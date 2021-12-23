@@ -97,7 +97,7 @@ class DialogListViewModel @Inject constructor(private val interactor: DatingInte
                 dialogs = state.dialogs
                 _dialogListViewState.value = DialogListViewState.Search(
                     text = "",
-                    dialogs = emptyList()
+                    dialogs = dialogs
                 )
             }
             else -> {
@@ -111,7 +111,7 @@ class DialogListViewModel @Inject constructor(private val interactor: DatingInte
             DialogListEvent.EnterScreen -> return
             is DialogListEvent.OnSearchFieldChanged -> {
                 val filteredDialogs =
-                    dialogs.filter { event.text.isNotEmpty() && event.text.lowercase() in it.userName.lowercase() }
+                    dialogs.filter { event.text.lowercase() in it.userName.lowercase() }
                 _dialogListViewState.value =
                     DialogListViewState.Search(text = event.text, dialogs = filteredDialogs)
             }
@@ -119,6 +119,7 @@ class DialogListViewModel @Inject constructor(private val interactor: DatingInte
                 _dialogListViewState.value = DialogListViewState.DialogList(dialogs)
                 dialogs = emptyList()
             }
+            is DialogListEvent.DialogSelected -> performDialogSelected(event.dialogId)
             else -> {
                 error("Unexpected $event for $state")
             }

@@ -72,4 +72,8 @@
     <string name="no_messages">It looks like there are no messages. You can fix it.</string>
     <string name="delete">Delete</string>
     <string name="block_user">Block user</string>
+    <string name="search_placeholder_text">Who are we looking for?</string>
+    <string name="turn_back">Turn back</string>
+    <string name="no_results">No results</string>
+    <string name="clear">Clear</string>
 </resources>
