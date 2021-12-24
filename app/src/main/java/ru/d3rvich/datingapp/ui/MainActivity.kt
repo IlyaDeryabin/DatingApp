@@ -119,7 +119,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screen.Settings.route) {
-                                SettingsScreen(onBackButtonClicked = { navController.popBackStack() })
+                                SettingsScreen(onBackButtonPressed = { navController.popBackStack() },
+                                    isDarkMode = isDarkMode,
+                                    onDarkModeChange = { isDarkMode = it })
                             }
                             composable("empty") {
                                 Text("Empty")

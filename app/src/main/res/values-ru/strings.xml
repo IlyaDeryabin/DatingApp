@@ -76,4 +76,5 @@
     <string name="turn_back">Вернуться</string>
     <string name="no_results">Нет результатов</string>
     <string name="clear">Очистить</string>
+    <string name="enable_dark_theme">Включить тёмную тему</string>
 </resources>

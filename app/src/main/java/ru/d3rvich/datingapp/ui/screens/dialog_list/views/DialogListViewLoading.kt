@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun DialogListLoading() {
+fun DialogListViewLoading() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
@@ -18,5 +18,5 @@ fun DialogListLoading() {
 @Preview
 @Composable
 fun DialogListLoadingPreview() {
-    DialogListLoading()
+    DialogListViewLoading()
 }

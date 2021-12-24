@@ -60,7 +60,7 @@ fun DialogListScreen(
             is DialogListViewState.Error -> DialogListViewError {
                 dialogListViewModel.obtainEvent(DialogListEvent.ReloadContent)
             }
-            DialogListViewState.Loading -> DialogListLoading()
+            DialogListViewState.Loading -> DialogListViewLoading()
             is DialogListViewState.Search -> DialogListViewSearch(
                 text = viewState.text,
                 onTextChange = { text ->
