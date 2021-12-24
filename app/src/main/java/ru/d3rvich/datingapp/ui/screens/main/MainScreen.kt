@@ -96,7 +96,7 @@ fun MainScreen(router: Router, isDarkMode: Boolean, onDarkModeChanged: (Boolean)
                         DialogListScreen(router = router, openDrawer = openDrawer)
                     }
                     composable(DrawerScreen.PairSearchScreen.route) {
-                        PairSearchScreen(openDrawer = openDrawer)
+                        PairSearchScreen(openDrawer = openDrawer, router = router)
                     }
                 }
             }

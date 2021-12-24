@@ -6,8 +6,20 @@ import ru.d3rvich.datingapp.domain.repositories.ProfileRepository
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor() : ProfileRepository {
-    override suspend fun getProfileBy(id: Long): ProfileEntity {
-        TODO("Not yet implemented")
+    override suspend fun getProfileBy(id: String): ProfileEntity {
+        // TODO: 24.12.2021 Реализовать получение пользователя по id
+        return ProfileEntity(
+            name = "Роман",
+            city = "Екатеринбург",
+            age = 22,
+            birthday = DateEntity(day = 24, month = 12, year = 1999),
+            description = "Здесь должно быть описание, но мне лень его придумывать. Поверьте, я хороший.",
+            zodiacId = 4,
+            fateNumber = 8,
+            socionicTypeNumber = 1,
+            personalitiesNumber = 1,
+            imageLink = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Zunge_raus.JPG/1200px-Zunge_raus.JPG"
+        )
     }
 
     override suspend fun getUserProfile(): ProfileEntity {

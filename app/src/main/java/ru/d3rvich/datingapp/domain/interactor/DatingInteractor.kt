@@ -18,9 +18,13 @@ interface DatingInteractor {
 
     suspend fun sendMessage(id: String, messageEntity: MessageEntity)
 
-    suspend fun getDialogFlow(dialogId: String) : Flow<MessageEntity>
+    suspend fun getDialogFlow(dialogId: String): Flow<MessageEntity>
 
     suspend fun saveUserProfile(profileEntity: ProfileEntity): Boolean
+
+    suspend fun getCandidatesForPairList(): List<Int>
+
+    suspend fun getUserProfileBy(id: String): ProfileEntity
 
     suspend fun getUserProfile(): ProfileEntity
 }

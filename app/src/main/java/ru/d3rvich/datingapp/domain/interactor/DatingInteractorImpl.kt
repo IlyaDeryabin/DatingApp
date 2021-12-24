@@ -41,6 +41,14 @@ class DatingInteractorImpl @Inject constructor(
         return profileRepository.saveUserProfile(profileEntity)
     }
 
+    override suspend fun getCandidatesForPairList(): List<Int> {
+        return listOf(0)
+    }
+
+    override suspend fun getUserProfileBy(id: String): ProfileEntity {
+        return profileRepository.getProfileBy(id)
+    }
+
     override suspend fun getUserProfile(): ProfileEntity {
         return profileRepository.getUserProfile()
     }
