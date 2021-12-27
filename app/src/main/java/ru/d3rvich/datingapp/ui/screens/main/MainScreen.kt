@@ -83,7 +83,10 @@ fun MainScreen(router: Router, isDarkMode: Boolean, onDarkModeChanged: (Boolean)
                             router.routeTo(Screen.ProfileScreen.route)
                         },
                         isDarkMode = isDarkMode,
-                        onDarkModeChange = onDarkModeChanged
+                        onDarkModeChange = onDarkModeChanged,
+                        onSignOffButtonClicked = {
+                            router.routeTo(Screen.LoginScreen.route)
+                        }
                     )
                 },
                 gesturesEnabled = true

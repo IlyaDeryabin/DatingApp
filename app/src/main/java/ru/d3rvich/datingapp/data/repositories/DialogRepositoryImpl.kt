@@ -8,6 +8,8 @@ import ru.d3rvich.datingapp.domain.entity.MessageEntity
 import ru.d3rvich.datingapp.domain.entity.UserEntity
 import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class DialogRepositoryImpl : DialogRepository {
     private var currentDialogMessageFlow: MutableSharedFlow<MessageEntity>? = null
@@ -39,15 +41,39 @@ class DialogRepositoryImpl : DialogRepository {
         return DialogEntity(
             id,
             userEntity,
-            listOf(MessageEntity(isMine = false, text = "Привет", dispatchTime = "now"))
+            listOf(
+                MessageEntity(
+                    isMine = false,
+                    text = "Привет!",
+                    dispatchTime = "18:22"
+                ),
+                MessageEntity(
+                    isMine = true,
+                    text = "Привет",
+                    dispatchTime = "18:37"
+                ),
+                MessageEntity(
+                    isMine = false,
+                    text = "Пойдём в кино?",
+                    dispatchTime = "18:39"
+                ),
+                MessageEntity(
+                    isMine = true,
+                    text = "Давай",
+                    dispatchTime = "20:16"
+                ),
+            )
         )
     }
 
+    /** LocalDateTime.now()
+    .format(DateTimeFormatter.ofPattern("hh:mm", Locale.getDefault()) */
     override suspend fun sendMessage(dialogId: String, messageEntity: MessageEntity): Result<Unit> {
         currentDialogMessageFlow!!.emit(
             messageEntity.copy(
                 isMine = false,
-                dispatchTime = LocalDateTime.now().toString()
+                dispatchTime = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("hh:mm", Locale.getDefault()))
             )
         )
         return Result.success(Unit)

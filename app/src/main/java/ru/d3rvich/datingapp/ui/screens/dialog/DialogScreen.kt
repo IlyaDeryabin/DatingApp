@@ -13,6 +13,9 @@ import ru.d3rvich.datingapp.ui.screens.dialog.models.DialogViewState
 import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewDisplay
 import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewError
 import ru.d3rvich.datingapp.ui.screens.dialog.views.DialogViewLoading
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Composable
 fun DialogScreen(navController: NavController, viewModel: DialogViewModel = hiltViewModel()) {
@@ -34,7 +37,8 @@ fun DialogScreen(navController: NavController, viewModel: DialogViewModel = hilt
                     val message = MessageEntity(
                         isMine = true,
                         text = newMessage,
-                        dispatchTime = "now"
+                        dispatchTime = LocalDateTime.now()
+                            .format(DateTimeFormatter.ofPattern("hh:mm", Locale.getDefault()))
                     )
                     onSendMessage(message)
                 },

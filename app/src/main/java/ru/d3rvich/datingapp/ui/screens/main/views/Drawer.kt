@@ -21,6 +21,7 @@ fun Drawer(
     profile: ProfileEntity,
     onDestinationClicked: (destination: String) -> Unit,
     onUserProfileClicked: () -> Unit,
+    onSignOffButtonClicked: () -> Unit,
     isDarkMode: Boolean,
     onDarkModeChange: (Boolean) -> Unit
 ) {
@@ -68,7 +69,11 @@ fun Drawer(
             TextButton(onClick = { onDestinationClicked(Screen.Settings.route) }) {
                 Text(text = stringResource(id = Screen.Settings.titleResId!!))
             }
+            TextButton(onClick = onSignOffButtonClicked) {
+                Text(text = stringResource(id = R.string.sign_out))
+            }
         }
+
     }
 }
 
@@ -92,5 +97,6 @@ fun DrawerPreview() {
         profile = profile,
         isDarkMode = false,
         onDarkModeChange = {},
-        onUserProfileClicked = {})
+        onUserProfileClicked = {},
+        onSignOffButtonClicked = {})
 }
