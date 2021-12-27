@@ -30,10 +30,10 @@ fun PasswordField(
     }
     val visibilityIcon: @Composable () -> Unit = {
         if (isPasswordVisible) {
-            Icon(painter = painterResource(id = R.drawable.ic_visibility_24),
+            Icon(painter = painterResource(id = R.drawable.ic_visibility_off_24),
                 contentDescription = "")
         } else {
-            Icon(painter = painterResource(id = R.drawable.ic_visibility_off_24),
+            Icon(painter = painterResource(id = R.drawable.ic_visibility_24),
                 contentDescription = "")
         }
     }
@@ -46,7 +46,7 @@ fun PasswordField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.clearFocusOnKeyboardDismiss(),
         singleLine = true,
         visualTransformation = visualTransformation,
         label = { Text(text = stringResource(id = labelStringRes)) },
