@@ -2,8 +2,10 @@ package ru.d3rvich.datingapp.ui.screens.profile_editor.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,6 +23,7 @@ import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.DateEntity
 import ru.d3rvich.datingapp.domain.entity.ProfileEntity
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
+import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
 
 @ExperimentalMaterialApi
@@ -50,10 +53,12 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
     var imageLink by rememberSaveable {
         mutableStateOf(profile?.imageLink ?: "")
     }
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clearFocusOnClick()
+            .verticalScroll(scrollState)
             .padding(horizontal = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -80,7 +85,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         TextField(
             value = name,
             onValueChange = { name = it },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearFocusOnKeyboardDismiss(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent
             ),
@@ -96,7 +103,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         )
         TextField(
             value = city, onValueChange = { city = it },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearFocusOnKeyboardDismiss(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent
             ),
@@ -114,7 +123,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         TextField(
             value = if (birthday != "null") birthday else "",
             onValueChange = { birthday = it },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearFocusOnKeyboardDismiss(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent
             ),
@@ -134,7 +145,8 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             onValueChange = { description = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp),
+                .height(150.dp)
+                .clearFocusOnKeyboardDismiss(),
             placeholder = {
                 Text(text = stringResource(id = R.string.describe_yourself))
             }
@@ -166,7 +178,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         TextField(
             value = fateNumber.toString(),
             onValueChange = { fateNumber = it.toInt() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearFocusOnKeyboardDismiss(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent
             ),
@@ -184,7 +198,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         TextField(
             value = socionicTypeNumber.toString(),
             onValueChange = { socionicTypeNumber = it.toInt() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearFocusOnKeyboardDismiss(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent
             ),
