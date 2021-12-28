@@ -44,7 +44,10 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         }
     }
 
-    private fun reduce(event: SignUpEvent, @Suppress("UNUSED_PARAMETER") viewState: SignUpViewState.SignUpDisplay) {
+    private fun reduce(
+        event: SignUpEvent,
+        @Suppress("UNUSED_PARAMETER") viewState: SignUpViewState.SignUpDisplay
+    ) {
         when (event) {
             is SignUpEvent.EnterScreen -> return
             is SignUpEvent.PerformSignUp -> {
@@ -64,7 +67,10 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         throw NotImplementedError("Unexpected $event for $viewState.")
     }
 
-    private fun reduce(event: SignUpEvent, @Suppress("UNUSED_PARAMETER") viewState: SignUpViewState.Error) {
+    private fun reduce(
+        event: SignUpEvent,
+        @Suppress("UNUSED_PARAMETER") viewState: SignUpViewState.Error
+    ) {
         when (event) {
             is SignUpEvent.EnterScreen -> {
                 _signUpViewState.value = SignUpViewState.SignUpDisplay

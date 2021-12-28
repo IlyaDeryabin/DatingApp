@@ -41,7 +41,7 @@ object NetworkModule {
                             null
                         )
                     }"
-                    header("Authorization ", token)
+                    header("Authorization", token)
                 }
                 contentType(ContentType.Application.Json)
             }
