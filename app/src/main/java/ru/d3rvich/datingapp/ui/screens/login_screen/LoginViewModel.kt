@@ -8,7 +8,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import ru.d3rvich.datingapp.domain.entity.AuthEntity
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
+import ru.d3rvich.datingapp.domain.utils.AuthResult
 import ru.d3rvich.datingapp.ui.base.EventHandler
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginAction
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginEvent
@@ -34,20 +36,31 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
             is LoginViewState.LoginOnProcess -> {
                 reduce(event = event, state = currentState)
             }
+            is LoginViewState.LoginFailure -> {
+                reduce(event = event, state = currentState)
+            }
         }
     }
 
-    private fun reduce(event: LoginEvent, state: LoginViewState.Login) {
+    private fun reduce(
+        event: LoginEvent,
+        @Suppress("UNUSED_PARAMETER") state: LoginViewState.Login
+    ) {
+        when (event) {
+            is LoginEvent.PerformLogin -> {
+                performLogin(event.authEntity)
+            }
+        }
+    }
+
+    private fun reduce(
+        event: LoginEvent,
+        @Suppress("UNUSED_PARAMETER") state: LoginViewState.LoginFailure
+    ) {
         when (event) {
             is LoginEvent.PerformLogin -> {
                 viewModelScope.launch {
-                    _loginViewState.value = LoginViewState.LoginOnProcess
-                    val result = interactor.performLogin(event.authEntity)
-                    if (result) {
-                        _loginAction.emit(LoginAction.LoginSuccessful)
-                    } else {
-                        _loginViewState.value = LoginViewState.LoginFailure
-                    }
+                    performLogin(event.authEntity)
                 }
             }
         }
@@ -55,5 +68,16 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
 
     private fun reduce(event: LoginEvent, state: LoginViewState.LoginOnProcess) {
         error("Invalid $event for $state")
+    }
+
+    private fun performLogin(authEntity: AuthEntity) {
+        viewModelScope.launch {
+            _loginViewState.value = LoginViewState.LoginOnProcess
+            when (interactor.performLogin(authEntity)) {
+                is AuthResult.Error ->
+                    _loginViewState.value = LoginViewState.LoginFailure
+                AuthResult.Success -> _loginAction.emit(LoginAction.LoginSuccessful)
+            }
+        }
     }
 }
