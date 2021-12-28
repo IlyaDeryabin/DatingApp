@@ -21,8 +21,15 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     LaunchedEffect(Unit) {
         loginViewModel.loginAction.collect { action ->
             when (action) {
-                is LoginAction.LoginSuccessful -> {
+                is LoginAction.NavigateToMainScreen -> {
                     navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.LoginScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+                LoginAction.NavigateToSignupScreen -> {
+                    navController.navigate(Screen.SignUpScreen.route) {
                         popUpTo(Screen.LoginScreen.route) {
                             inclusive = true
                         }
@@ -39,11 +46,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                     LoginEvent.PerformLogin(loginEntity)
                 )
             }, onSignUpClicked = {
-                navController.navigate(Screen.SignUpScreen.route) {
-                    popUpTo(Screen.LoginScreen.route) {
-                        inclusive = true
-                    }
-                }
+                loginViewModel.obtainEvent(
+                    LoginEvent.SignupButtonClicked
+                )
             })
     }
 }

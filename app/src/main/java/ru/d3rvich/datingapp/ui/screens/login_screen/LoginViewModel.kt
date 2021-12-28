@@ -50,6 +50,11 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
             is LoginEvent.PerformLogin -> {
                 performLogin(event.authEntity)
             }
+            LoginEvent.SignupButtonClicked -> {
+                viewModelScope.launch {
+                    _loginAction.emit(LoginAction.NavigateToSignupScreen)
+                }
+            }
         }
     }
 
@@ -63,11 +68,23 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
                     performLogin(event.authEntity)
                 }
             }
+            LoginEvent.SignupButtonClicked -> {
+                viewModelScope.launch {
+                    _loginAction.emit(LoginAction.NavigateToSignupScreen)
+                }
+            }
         }
     }
 
     private fun reduce(event: LoginEvent, state: LoginViewState.LoginOnProcess) {
-        error("Invalid $event for $state")
+        when (event) {
+            is LoginEvent.PerformLogin -> error("Unexpected $event for $state")
+            LoginEvent.SignupButtonClicked -> {
+                viewModelScope.launch {
+                    _loginAction.emit(LoginAction.NavigateToSignupScreen)
+                }
+            }
+        }
     }
 
     private fun performLogin(authEntity: AuthEntity) {
@@ -76,7 +93,7 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
             when (interactor.performLogin(authEntity)) {
                 is AuthResult.Error ->
                     _loginViewState.value = LoginViewState.LoginFailure
-                AuthResult.Success -> _loginAction.emit(LoginAction.LoginSuccessful)
+                AuthResult.Success -> _loginAction.emit(LoginAction.NavigateToMainScreen)
             }
         }
     }

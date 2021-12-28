@@ -31,6 +31,7 @@ import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.AuthEntity
 import ru.d3rvich.datingapp.ui.common.PasswordField
 import ru.d3rvich.datingapp.ui.common.PhoneNumberField
+import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginViewState
 
 @ExperimentalAnimationApi
@@ -55,8 +56,8 @@ fun LoginViewDisplay(
 
     Box(
         modifier = Modifier
-            .fillMaxHeight(0.8f)
-            .fillMaxWidth()
+            .fillMaxSize()
+            .clearFocusOnClick()
     ) {
         val focusManager = LocalFocusManager.current
         Text(text = stringResource(id = R.string.sign_up), modifier = Modifier
