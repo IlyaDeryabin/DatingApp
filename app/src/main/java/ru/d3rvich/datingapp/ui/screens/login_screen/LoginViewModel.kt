@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(private val interactor: DatingInteractor) : ViewModel(),
     EventHandler<LoginEvent> {
 
-    private val _loginViewState = mutableStateOf<LoginViewState>(LoginViewState.Login)
+    private val _loginViewState = mutableStateOf<LoginViewState>(LoginViewState.Display)
     val loginViewState: State<LoginViewState>
         get() = _loginViewState
 
@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
 
     override fun obtainEvent(event: LoginEvent) {
         when (val currentState = _loginViewState.value) {
-            is LoginViewState.Login -> {
+            is LoginViewState.Display -> {
                 reduce(event = event, state = currentState)
             }
             is LoginViewState.LoginOnProcess -> {
@@ -44,9 +44,10 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
 
     private fun reduce(
         event: LoginEvent,
-        @Suppress("UNUSED_PARAMETER") state: LoginViewState.Login
+        @Suppress("UNUSED_PARAMETER") state: LoginViewState.Display
     ) {
         when (event) {
+            LoginEvent.EnterScreen -> return
             is LoginEvent.PerformLogin -> {
                 performLogin(event.authEntity)
             }
@@ -63,6 +64,9 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
         @Suppress("UNUSED_PARAMETER") state: LoginViewState.LoginFailure
     ) {
         when (event) {
+            LoginEvent.EnterScreen -> {
+                _loginViewState.value = LoginViewState.Display
+            }
             is LoginEvent.PerformLogin -> {
                 viewModelScope.launch {
                     performLogin(event.authEntity)
@@ -78,6 +82,7 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
 
     private fun reduce(event: LoginEvent, state: LoginViewState.LoginOnProcess) {
         when (event) {
+            LoginEvent.EnterScreen -> return
             is LoginEvent.PerformLogin -> error("Unexpected $event for $state")
             LoginEvent.SignupButtonClicked -> {
                 viewModelScope.launch {
@@ -90,9 +95,10 @@ class LoginViewModel @Inject constructor(private val interactor: DatingInteracto
     private fun performLogin(authEntity: AuthEntity) {
         viewModelScope.launch {
             _loginViewState.value = LoginViewState.LoginOnProcess
-            when (interactor.performLogin(authEntity)) {
-                is AuthResult.Error ->
-                    _loginViewState.value = LoginViewState.LoginFailure
+            when (val result = interactor.performLogin(authEntity)) {
+                is AuthResult.Error -> {
+                    _loginViewState.value = LoginViewState.LoginFailure(result.exception)
+                }
                 AuthResult.Success -> _loginAction.emit(LoginAction.NavigateToMainScreen)
             }
         }

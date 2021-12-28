@@ -19,6 +19,7 @@ import ru.d3rvich.datingapp.ui.screens.login_screen.views.LoginViewDisplay
 @Composable
 fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     LaunchedEffect(Unit) {
+        loginViewModel.obtainEvent(LoginEvent.EnterScreen)
         loginViewModel.loginAction.collect { action ->
             when (action) {
                 is LoginAction.NavigateToMainScreen -> {

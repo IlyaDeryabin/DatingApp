@@ -76,4 +76,7 @@
     <string name="turn_back">Вернуться</string>
     <string name="no_results">Нет результатов</string>
     <string name="clear">Очистить</string>
+    <string name="invalid_login_or_password">Неверный номер телефона или пароль</string>
+    <string name="server_does_not_responding">Сервер не отвечает</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 </resources>

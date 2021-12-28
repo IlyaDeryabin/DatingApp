@@ -31,9 +31,9 @@ class AuthServiceImpl @Inject constructor(
         } catch (e: RedirectResponseException) { // 3xx codes
             error(e.printStackTrace())
         } catch (e: ClientRequestException) { // 4xx codes
-            return AuthResult.Error(AuthException.ServerNotResponding)
+            return AuthResult.Error(AuthException.InvalidLoginOrPassword)
         } catch (e: ServerResponseException) { // 5xx codes
-            AuthResult.Error(AuthException.UserAlreadyExist)
+            AuthResult.Error(AuthException.ServerNotResponding)
         } catch (e: Exception) {
             error(e.printStackTrace())
         }
