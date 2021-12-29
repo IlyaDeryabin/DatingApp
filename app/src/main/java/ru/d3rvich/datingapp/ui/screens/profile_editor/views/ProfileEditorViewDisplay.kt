@@ -27,6 +27,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.DateEntity
 import ru.d3rvich.datingapp.domain.entity.ProfileEntity
+import ru.d3rvich.datingapp.domain.utils.calculateFateNumber
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
@@ -72,6 +73,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             title = stringResource(id = R.string.select_date)
         ) { localDate: LocalDate ->
             birthday = localDate.toDateEntity()
+            fateNumber = localDate.toDateEntity().calculateFateNumber()
         }
     }
     Column(
@@ -142,7 +144,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         )
         TextField(
             value = if (birthday != null) birthday.toString() else "",
-            onValueChange = { birthday = DateEntity.parse(it) },
+            onValueChange = { },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
@@ -191,7 +193,6 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 .background(Color.LightGray)
         )
 
-        // TODO: 13.12.2021 Вводить автоматически после выбора даты
         Text(
             text = stringResource(id = R.string.fate_number),
             modifier = Modifier
@@ -201,14 +202,16 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         )
         TextField(
             value = fateNumber.toString(),
-            onValueChange = { fateNumber = it.toInt() },
+            onValueChange = { },
             modifier = Modifier
                 .fillMaxWidth()
                 .clearFocusOnKeyboardDismiss(),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
+                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
             ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center)
+            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+            enabled = false
         )
 
         // TODO: 13.12.2021 Неужели соционический тип дублирует персоналити?!

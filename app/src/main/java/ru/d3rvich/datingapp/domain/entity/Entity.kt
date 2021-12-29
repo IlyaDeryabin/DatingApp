@@ -47,7 +47,7 @@ data class DateEntity(val day: Int, val month: Int, val year: Int) {
          * */
         fun parse(date: String): DateEntity {
             val parsedString = date.split('.')
-            require(parsedString.size != 3)
+            require(parsedString.size == 3)
             val dayOfMonth = parsedString[0]
             val month = parsedString[1]
             val year = parsedString[2]
