@@ -19,10 +19,18 @@ import ru.d3rvich.datingapp.ui.screens.login_screen.views.LoginViewDisplay
 @Composable
 fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     LaunchedEffect(Unit) {
+        loginViewModel.obtainEvent(LoginEvent.EnterScreen)
         loginViewModel.loginAction.collect { action ->
             when (action) {
-                is LoginAction.LoginSuccessful -> {
+                is LoginAction.NavigateToMainScreen -> {
                     navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.LoginScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+                LoginAction.NavigateToSignupScreen -> {
+                    navController.navigate(Screen.SignUpScreen.route) {
                         popUpTo(Screen.LoginScreen.route) {
                             inclusive = true
                         }
@@ -39,11 +47,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                     LoginEvent.PerformLogin(loginEntity)
                 )
             }, onSignUpClicked = {
-                navController.navigate(Screen.SignUpScreen.route) {
-                    popUpTo(Screen.LoginScreen.route) {
-                        inclusive = true
-                    }
-                }
+                loginViewModel.obtainEvent(
+                    LoginEvent.SignupButtonClicked
+                )
             })
     }
 }

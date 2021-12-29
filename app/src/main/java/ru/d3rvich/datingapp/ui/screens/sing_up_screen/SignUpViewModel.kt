@@ -8,7 +8,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import ru.d3rvich.datingapp.R
+import ru.d3rvich.datingapp.domain.exceptions.AuthException
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
+import ru.d3rvich.datingapp.domain.utils.AuthResult
 import ru.d3rvich.datingapp.ui.base.EventHandler
 import ru.d3rvich.datingapp.ui.mappers.toAuthEntity
 import ru.d3rvich.datingapp.ui.model.SingUpUiModel
@@ -17,7 +20,6 @@ import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpEvent
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 import javax.inject.Inject
 
-@Suppress("UNUSED_PARAMETER")
 @HiltViewModel
 class SignUpViewModel @Inject constructor(private val interactor: DatingInteractor) : ViewModel(),
     EventHandler<SignUpEvent> {
@@ -44,13 +46,15 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         }
     }
 
-    private fun reduce(event: SignUpEvent, viewState: SignUpViewState.SignUpDisplay) {
+    private fun reduce(
+        event: SignUpEvent,
+        @Suppress("UNUSED_PARAMETER") viewState: SignUpViewState.SignUpDisplay
+    ) {
         when (event) {
-            is SignUpEvent.EnterScreen -> { // do nothing
-            }
+            is SignUpEvent.EnterScreen -> return
             is SignUpEvent.PerformSignUp -> {
                 viewModelScope.launch {
-                    performSignUp(event.signUpUiModel)
+                    performSignup(event.signUpUiModel)
                 }
             }
             is SignUpEvent.LoginButtonClicked -> {
@@ -65,7 +69,10 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         throw NotImplementedError("Unexpected $event for $viewState.")
     }
 
-    private fun reduce(event: SignUpEvent, viewState: SignUpViewState.Error) {
+    private fun reduce(
+        event: SignUpEvent,
+        @Suppress("UNUSED_PARAMETER") viewState: SignUpViewState.Error
+    ) {
         when (event) {
             is SignUpEvent.EnterScreen -> {
                 _signUpViewState.value = SignUpViewState.SignUpDisplay
@@ -77,24 +84,31 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
             }
             is SignUpEvent.PerformSignUp -> {
                 viewModelScope.launch {
-                    performSignUp(event.signUpUiModel)
+                    performSignup(event.signUpUiModel)
                 }
             }
         }
     }
 
-    private suspend fun performSignUp(signUpUiModel: SingUpUiModel) {
+    private suspend fun performSignup(signUpUiModel: SingUpUiModel) {
         if (signUpUiModel.passwordFirst == signUpUiModel.passwordSecond) {
             _signUpViewState.value = SignUpViewState.InProgress
             val authEntity = signUpUiModel.toAuthEntity()
-            val result = interactor.performSignUp(authEntity)
-            if (result) {
-                _signUpAction.emit(SignUpAction.SignUpSuccessful)
-            } else {
-                _signUpViewState.value = SignUpViewState.Error("Ошибка при регистрации")
+            when (val result = interactor.performSignUp(authEntity)) {
+                is AuthResult.Error -> {
+                    val stringRes: Int = when (result.exception) {
+                        AuthException.ServerNotResponding -> R.string.server_does_not_responding
+                        AuthException.UserAlreadyExist -> R.string.user_already_exist
+                        else -> {
+                            R.string.unknown_error
+                        }
+                    }
+                    _signUpViewState.value = SignUpViewState.Error(stringRes)
+                }
+                AuthResult.Success -> _signUpAction.emit(SignUpAction.SignUpSuccessful)
             }
         } else {
-            _signUpViewState.value = SignUpViewState.Error("Пароли не совпадают")
+            _signUpViewState.value = SignUpViewState.Error(R.string.passwords_are_not_same)
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
 import ru.d3rvich.datingapp.ui.Screen
@@ -16,9 +17,11 @@ import ru.d3rvich.datingapp.ui.screens.sing_up_screen.views.SignUpDisplay
 @ExperimentalAnimationApi
 @Composable
 fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel) {
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(Unit) {
         signUpViewModel.obtainEvent(SignUpEvent.EnterScreen)
         signUpViewModel.signUpAction.collect { action ->
+            focusManager.clearFocus()
             when (action) {
                 is SignUpAction.SignUpSuccessful -> {
                     navController.navigate(Screen.MainScreen.route) {
