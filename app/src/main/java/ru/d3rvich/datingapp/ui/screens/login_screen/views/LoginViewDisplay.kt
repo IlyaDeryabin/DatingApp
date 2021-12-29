@@ -124,7 +124,7 @@ fun LoginViewDisplay(
                     .onKeyEvent { onBackKeyEvent(it, focusManager) }
             )
             AnimatedVisibility(visible = state is LoginViewState.LoginFailure) {
-                if (state is LoginViewState.LoginFailure) {
+                if (state is LoginViewState.LoginFailure) { // Проверка на случай перехода от LoginFailure к другому состоянию
                     val errorText: Int = when (state.exception) {
                         AuthException.InvalidLoginOrPassword -> R.string.invalid_login_or_password
                         AuthException.ServerNotResponding -> R.string.server_does_not_responding

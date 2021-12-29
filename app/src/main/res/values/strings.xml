@@ -79,4 +79,6 @@
     <string name="invalid_login_or_password">Invalid phone number or password</string>
     <string name="server_does_not_responding">Server does not responding</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="user_already_exist">User with already exist</string>
+    <string name="passwords_are_not_same">Passwords are not same</string>
 </resources>

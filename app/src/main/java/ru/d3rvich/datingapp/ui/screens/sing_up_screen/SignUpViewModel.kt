@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import ru.d3rvich.datingapp.R
+import ru.d3rvich.datingapp.domain.exceptions.AuthException
 import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.domain.utils.AuthResult
 import ru.d3rvich.datingapp.ui.base.EventHandler
@@ -92,13 +94,21 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         if (signUpUiModel.passwordFirst == signUpUiModel.passwordSecond) {
             _signUpViewState.value = SignUpViewState.InProgress
             val authEntity = signUpUiModel.toAuthEntity()
-            when (interactor.performSignUp(authEntity)) {
-                is AuthResult.Error ->
-                    _signUpViewState.value = SignUpViewState.Error("Ошибка при регистрации")
+            when (val result = interactor.performSignUp(authEntity)) {
+                is AuthResult.Error -> {
+                    val stringRes: Int = when (result.exception) {
+                        AuthException.ServerNotResponding -> R.string.server_does_not_responding
+                        AuthException.UserAlreadyExist -> R.string.user_already_exist
+                        else -> {
+                            R.string.unknown_error
+                        }
+                    }
+                    _signUpViewState.value = SignUpViewState.Error(stringRes)
+                }
                 AuthResult.Success -> _signUpAction.emit(SignUpAction.SignUpSuccessful)
             }
         } else {
-            _signUpViewState.value = SignUpViewState.Error("Пароли не совпадают")
+            _signUpViewState.value = SignUpViewState.Error(R.string.passwords_are_not_same)
         }
     }
 }
