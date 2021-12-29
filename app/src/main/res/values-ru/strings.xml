@@ -81,4 +81,6 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="user_already_exist">Пользователь уже существует</string>
     <string name="passwords_are_not_same">Пароли не совпадают</string>
+    <string name="cancel">Отмена</string>
+    <string name="select_date">Выберите дату</string>
 </resources>

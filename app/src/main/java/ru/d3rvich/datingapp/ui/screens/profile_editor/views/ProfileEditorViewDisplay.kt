@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -19,12 +21,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.DateEntity
 import ru.d3rvich.datingapp.domain.entity.ProfileEntity
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
+import ru.d3rvich.datingapp.ui.mappers.toDateEntity
+import ru.d3rvich.datingapp.ui.mappers.toLocalDate
+import java.time.LocalDate
 
 @ExperimentalMaterialApi
 @Composable
@@ -36,7 +44,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         mutableStateOf(profile?.city ?: "")
     }
     var birthday by rememberSaveable {
-        mutableStateOf(profile?.birthday.toString())
+        mutableStateOf(profile?.birthday)
     }
     var description by rememberSaveable {
         mutableStateOf(profile?.description ?: "")
@@ -54,6 +62,18 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         mutableStateOf(profile?.imageLink ?: "")
     }
     val scrollState = rememberScrollState()
+    val dialogState = rememberMaterialDialogState()
+    MaterialDialog(dialogState = dialogState, buttons = {
+        positiveButton(stringResource(id = R.string.ok))
+        negativeButton(stringResource(id = R.string.cancel))
+    }) {
+        datepicker(
+            initialDate = birthday?.toLocalDate() ?: LocalDate.now(),
+            title = stringResource(id = R.string.select_date)
+        ) { localDate: LocalDate ->
+            birthday = localDate.toDateEntity()
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,7 +132,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
             singleLine = true
         )
-        // TODO: 13.12.2021 Добавить выбор даты через Date Picker
+
         Text(
             text = stringResource(id = R.string.birthday),
             modifier = Modifier
@@ -121,17 +141,21 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             textAlign = TextAlign.Start
         )
         TextField(
-            value = if (birthday != "null") birthday else "",
-            onValueChange = { birthday = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
+            value = if (birthday != null) birthday.toString() else "",
+            onValueChange = { birthday = DateEntity.parse(it) },
+            modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
+                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
             ),
             textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            trailingIcon = {
+                IconButton(onClick = { dialogState.show() }) {
+                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "")
+                }
+            },
+            enabled = false
         )
         Text(
             text = stringResource(id = R.string.description),
@@ -269,7 +293,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-            enabled = name.isNotBlank() && city.isNotBlank() && birthday.isNotBlank() && description.isNotBlank()
+            enabled = name.isNotBlank() && city.isNotBlank() && birthday != null && description.isNotBlank()
         ) {
             Text(text = stringResource(id = R.string.save))
         }

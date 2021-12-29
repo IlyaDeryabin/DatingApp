@@ -1,12 +1,21 @@
 package ru.d3rvich.datingapp.ui.mappers
 
 import ru.d3rvich.datingapp.domain.entity.AuthEntity
+import ru.d3rvich.datingapp.domain.entity.DateEntity
 import ru.d3rvich.datingapp.ui.model.SingUpUiModel
+import java.time.LocalDate
 
 fun SingUpUiModel.toAuthEntity(): AuthEntity {
-    if (passwordFirst == passwordSecond) {
-        return AuthEntity(phoneNumber, passwordFirst)
-    } else {
-        error("Пароли не совпадают. $passwordFirst и $passwordSecond должны быть равыны.")
+    require(passwordFirst == passwordSecond) {
+        "Пароли не совпадают. $passwordFirst и $passwordSecond должны быть равыны."
     }
+    return AuthEntity(phoneNumber, passwordFirst)
+}
+
+fun LocalDate.toDateEntity(): DateEntity {
+    return DateEntity(day = dayOfMonth, month = monthValue, year = year)
+}
+
+fun DateEntity.toLocalDate(): LocalDate {
+    return LocalDate.of(year, month, day)
 }
