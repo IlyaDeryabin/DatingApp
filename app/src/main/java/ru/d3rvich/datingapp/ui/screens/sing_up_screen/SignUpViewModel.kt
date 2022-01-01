@@ -14,7 +14,7 @@ import ru.d3rvich.datingapp.domain.interactor.DatingInteractor
 import ru.d3rvich.datingapp.domain.utils.AuthResult
 import ru.d3rvich.datingapp.ui.base.EventHandler
 import ru.d3rvich.datingapp.ui.mappers.toAuthEntity
-import ru.d3rvich.datingapp.ui.model.SingUpUiModel
+import ru.d3rvich.datingapp.ui.model.SignupUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpAction
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpEvent
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
@@ -90,7 +90,7 @@ class SignUpViewModel @Inject constructor(private val interactor: DatingInteract
         }
     }
 
-    private suspend fun performSignup(signUpUiModel: SingUpUiModel) {
+    private suspend fun performSignup(signUpUiModel: SignupUiModel) {
         if (signUpUiModel.passwordFirst == signUpUiModel.passwordSecond) {
             _signUpViewState.value = SignUpViewState.InProgress
             val authEntity = signUpUiModel.toAuthEntity()

@@ -51,7 +51,7 @@ data class DateEntity(val day: Int, val month: Int, val year: Int) {
             val dayOfMonth = parsedString[0]
             val month = parsedString[1]
             val year = parsedString[2]
-            require(dayOfMonth.length == 2 && month.length == 2 && year.length == 4)
+            require(dayOfMonth.length <= 2 && month.length <= 2 && year.length <= 4)
             return DateEntity(
                 dayOfMonth.toInt(),
                 month.toInt(),

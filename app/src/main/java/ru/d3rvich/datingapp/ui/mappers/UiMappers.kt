@@ -2,10 +2,10 @@ package ru.d3rvich.datingapp.ui.mappers
 
 import ru.d3rvich.datingapp.domain.entity.AuthEntity
 import ru.d3rvich.datingapp.domain.entity.DateEntity
-import ru.d3rvich.datingapp.ui.model.SingUpUiModel
+import ru.d3rvich.datingapp.ui.model.SignupUiModel
 import java.time.LocalDate
 
-fun SingUpUiModel.toAuthEntity(): AuthEntity {
+fun SignupUiModel.toAuthEntity(): AuthEntity {
     require(passwordFirst == passwordSecond) {
         "Пароли не совпадают. $passwordFirst и $passwordSecond должны быть равыны."
     }
