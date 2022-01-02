@@ -83,4 +83,5 @@
     <string name="passwords_are_not_same">Пароли не совпадают</string>
     <string name="cancel">Отмена</string>
     <string name="select_date">Выберите дату</string>
+    <string name="you_have_to_enter_birthday">Нужно ввести дату рождения</string>
 </resources>

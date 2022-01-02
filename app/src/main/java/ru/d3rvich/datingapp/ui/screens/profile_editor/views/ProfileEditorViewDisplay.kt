@@ -1,6 +1,6 @@
 package ru.d3rvich.datingapp.ui.screens.profile_editor.views
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -31,8 +31,10 @@ import ru.d3rvich.datingapp.domain.utils.calculateFateNumber
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
+import ru.d3rvich.datingapp.ui.constants.Zodiac
 import ru.d3rvich.datingapp.ui.mappers.toDateEntity
 import ru.d3rvich.datingapp.ui.mappers.toLocalDate
+import ru.d3rvich.datingapp.ui.model.DateWithoutYearUiModel
 import java.time.LocalDate
 
 @ExperimentalMaterialApi
@@ -53,6 +55,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
     var fateNumber by rememberSaveable {
         mutableStateOf(profile?.fateNumber ?: 0)
     }
+    var zodiacId by rememberSaveable {
+        mutableStateOf(profile?.zodiacId ?: -1)
+    }
     var socionicTypeNumber by rememberSaveable {
         mutableStateOf(profile?.socionicTypeNumber ?: 0)
     }
@@ -70,10 +75,13 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
     }) {
         datepicker(
             initialDate = birthday?.toLocalDate() ?: LocalDate.now(),
-            title = stringResource(id = R.string.select_date)
+            title = stringResource(id = R.string.select_date),
+            yearRange = IntRange(1900, LocalDate.now().year)
         ) { localDate: LocalDate ->
             birthday = localDate.toDateEntity()
             fateNumber = localDate.toDateEntity().calculateFateNumber()
+            val date = DateWithoutYearUiModel(localDate.dayOfMonth, localDate.monthValue)
+            zodiacId = Zodiac.values().indexOf(Zodiac.findZodiacByDate(date))
         }
     }
     Column(
@@ -145,7 +153,9 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         TextField(
             value = if (birthday != null) birthday.toString() else "",
             onValueChange = { },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { dialogState.show() },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
@@ -186,11 +196,22 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 .padding(start = 8.dp, bottom = 8.dp),
             textAlign = TextAlign.Start
         )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(Color.LightGray)
+        val zodiacText = if (zodiacId != -1) {
+            val sign = Zodiac.values()[zodiacId]
+            stringResource(id = sign.stringRes)
+        } else {
+            stringResource(id = R.string.you_have_to_enter_birthday)
+        }
+        TextField(
+            value = zodiacText,
+            onValueChange = { },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
+            ),
+            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+            enabled = false
         )
 
         Text(
@@ -203,9 +224,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         TextField(
             value = fateNumber.toString(),
             onValueChange = { },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
+            modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)

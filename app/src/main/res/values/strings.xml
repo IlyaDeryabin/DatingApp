@@ -84,4 +84,5 @@
     <string name="cancel">Cancel</string>
     <string name="ok" translatable="false">OK</string>
     <string name="select_date">Select date</string>
+    <string name="you_have_to_enter_birthday">You have to enter birthday</string>
 </resources>
