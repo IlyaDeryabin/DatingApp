@@ -1,6 +1,6 @@
 package ru.d3rvich.datingapp.ui.model
 
-data class SingUpUiModel(
+data class SignupUiModel(
     val phoneNumber: String,
     val passwordFirst: String,
     val passwordSecond: String

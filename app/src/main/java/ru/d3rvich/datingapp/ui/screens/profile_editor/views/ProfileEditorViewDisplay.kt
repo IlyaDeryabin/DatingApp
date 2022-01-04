@@ -1,12 +1,14 @@
 package ru.d3rvich.datingapp.ui.screens.profile_editor.views
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -19,12 +21,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.DateEntity
 import ru.d3rvich.datingapp.domain.entity.ProfileEntity
+import ru.d3rvich.datingapp.domain.utils.calculateFateNumber
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
+import ru.d3rvich.datingapp.ui.constants.Zodiac
+import ru.d3rvich.datingapp.ui.mappers.toDateEntity
+import ru.d3rvich.datingapp.ui.mappers.toLocalDate
+import ru.d3rvich.datingapp.ui.model.DateWithoutYearUiModel
+import java.time.LocalDate
 
 @ExperimentalMaterialApi
 @Composable
@@ -36,13 +47,16 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         mutableStateOf(profile?.city ?: "")
     }
     var birthday by rememberSaveable {
-        mutableStateOf(profile?.birthday.toString())
+        mutableStateOf(profile?.birthday)
     }
     var description by rememberSaveable {
         mutableStateOf(profile?.description ?: "")
     }
     var fateNumber by rememberSaveable {
         mutableStateOf(profile?.fateNumber ?: 0)
+    }
+    var zodiacId by rememberSaveable {
+        mutableStateOf(profile?.zodiacId ?: -1)
     }
     var socionicTypeNumber by rememberSaveable {
         mutableStateOf(profile?.socionicTypeNumber ?: 0)
@@ -54,6 +68,22 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         mutableStateOf(profile?.imageLink ?: "")
     }
     val scrollState = rememberScrollState()
+    val dialogState = rememberMaterialDialogState()
+    MaterialDialog(dialogState = dialogState, buttons = {
+        positiveButton(stringResource(id = R.string.ok))
+        negativeButton(stringResource(id = R.string.cancel))
+    }) {
+        datepicker(
+            initialDate = birthday?.toLocalDate() ?: LocalDate.now(),
+            title = stringResource(id = R.string.select_date),
+            yearRange = IntRange(1900, LocalDate.now().year)
+        ) { localDate: LocalDate ->
+            birthday = localDate.toDateEntity()
+            fateNumber = localDate.toDateEntity().calculateFateNumber()
+            val date = DateWithoutYearUiModel(localDate.dayOfMonth, localDate.monthValue)
+            zodiacId = Zodiac.values().indexOf(Zodiac.findZodiacByDate(date))
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,7 +142,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
             singleLine = true
         )
-        // TODO: 13.12.2021 Добавить выбор даты через Date Picker
+
         Text(
             text = stringResource(id = R.string.birthday),
             modifier = Modifier
@@ -121,17 +151,23 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             textAlign = TextAlign.Start
         )
         TextField(
-            value = if (birthday != "null") birthday else "",
-            onValueChange = { birthday = it },
+            value = if (birthday != null) birthday.toString() else "",
+            onValueChange = { },
             modifier = Modifier
                 .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
+                .clickable { dialogState.show() },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
+                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
             ),
             textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            trailingIcon = {
+                IconButton(onClick = { dialogState.show() }) {
+                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "")
+                }
+            },
+            enabled = false
         )
         Text(
             text = stringResource(id = R.string.description),
@@ -160,14 +196,24 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 .padding(start = 8.dp, bottom = 8.dp),
             textAlign = TextAlign.Start
         )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(Color.LightGray)
+        val zodiacText = if (zodiacId != -1) {
+            val sign = Zodiac.values()[zodiacId]
+            stringResource(id = sign.stringRes)
+        } else {
+            stringResource(id = R.string.you_have_to_enter_birthday)
+        }
+        TextField(
+            value = zodiacText,
+            onValueChange = { },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
+            ),
+            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+            enabled = false
         )
 
-        // TODO: 13.12.2021 Вводить автоматически после выбора даты
         Text(
             text = stringResource(id = R.string.fate_number),
             modifier = Modifier
@@ -177,14 +223,14 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
         )
         TextField(
             value = fateNumber.toString(),
-            onValueChange = { fateNumber = it.toInt() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
+            onValueChange = { },
+            modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
+                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
             ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center)
+            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+            enabled = false
         )
 
         // TODO: 13.12.2021 Неужели соционический тип дублирует персоналити?!
@@ -269,7 +315,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-            enabled = name.isNotBlank() && city.isNotBlank() && birthday.isNotBlank() && description.isNotBlank()
+            enabled = name.isNotBlank() && city.isNotBlank() && birthday != null && description.isNotBlank()
         ) {
             Text(text = stringResource(id = R.string.save))
         }

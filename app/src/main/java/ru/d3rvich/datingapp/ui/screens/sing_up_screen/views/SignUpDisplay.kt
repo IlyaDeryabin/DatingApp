@@ -22,14 +22,14 @@ import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.ui.common.PasswordField
 import ru.d3rvich.datingapp.ui.common.PhoneNumberField
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
-import ru.d3rvich.datingapp.ui.model.SingUpUiModel
+import ru.d3rvich.datingapp.ui.model.SignupUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 
 @ExperimentalAnimationApi
 @Composable
 fun SignUpDisplay(
     viewState: SignUpViewState,
-    onSignUpButtonClicked: (SingUpUiModel) -> Unit,
+    onSignUpButtonClicked: (SignupUiModel) -> Unit,
     onLoginButtonClicked: () -> Unit
 ) {
     Box(
@@ -99,7 +99,7 @@ fun SignUpDisplay(
                 onClick = {
                     if (viewState !is SignUpViewState.InProgress) {
                         val signUpUiModel =
-                            SingUpUiModel(phoneNumber, passwordFirst, passwordSecond)
+                            SignupUiModel(phoneNumber, passwordFirst, passwordSecond)
                         onSignUpButtonClicked(signUpUiModel)
                     }
                 },
