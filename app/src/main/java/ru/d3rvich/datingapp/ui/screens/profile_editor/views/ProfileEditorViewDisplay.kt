@@ -1,5 +1,13 @@
 package ru.d3rvich.datingapp.ui.screens.profile_editor.views
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +22,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -67,6 +78,12 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
     var imageLink by rememberSaveable {
         mutableStateOf(profile?.imageLink ?: "")
     }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            imageLink = uri?.toString() ?: ""
+        }
+    )
     val scrollState = rememberScrollState()
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(dialogState = dialogState, buttons = {
@@ -87,237 +104,266 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clearFocusOnClick()
-            .verticalScroll(scrollState)
-            .padding(horizontal = 60.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            onClick = { /* TODO: 13.12.2021 Реализовать выбор фотографии, при нажатии на кнопку */ },
-            modifier = Modifier
-                .padding(top = 60.dp, bottom = 28.dp)
-                .size(60.dp),
-            shape = CircleShape
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_add_a_photo_24),
-                contentDescription = stringResource(id = R.string.select_photo)
-            )
-        }
-        Text(
-            text = stringResource(id = R.string.name),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
-            ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            singleLine = true
-        )
-        Text(
-            text = stringResource(id = R.string.city),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        TextField(
-            value = city, onValueChange = { city = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
-            ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            singleLine = true
-        )
-
-        Text(
-            text = stringResource(id = R.string.birthday),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        TextField(
-            value = if (birthday != null) birthday.toString() else "",
-            onValueChange = { },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { dialogState.show() },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
-            ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                IconButton(onClick = { dialogState.show() }) {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "")
-                }
-            },
-            enabled = false
-        )
-        Text(
-            text = stringResource(id = R.string.description),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, bottom = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        TextField(
-            value = description,
-            onValueChange = { description = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .clearFocusOnKeyboardDismiss(),
-            placeholder = {
-                Text(text = stringResource(id = R.string.describe_yourself))
-            }
-        )
-
-        // TODO: 13.12.2021 Вводить автоматиски после ввода даты
-        Text(
-            text = stringResource(id = R.string.zodiac_sign),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, bottom = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        val zodiacText = if (zodiacId != -1) {
-            val sign = Zodiac.values()[zodiacId]
-            stringResource(id = sign.stringRes)
-        } else {
-            stringResource(id = R.string.you_have_to_enter_birthday)
-        }
-        TextField(
-            value = zodiacText,
-            onValueChange = { },
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
-            ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            enabled = false
-        )
-
-        Text(
-            text = stringResource(id = R.string.fate_number),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, bottom = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        TextField(
-            value = fateNumber.toString(),
-            onValueChange = { },
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
-            ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
-            enabled = false
-        )
-
-        // TODO: 13.12.2021 Неужели соционический тип дублирует персоналити?!
-        Text(
-            text = stringResource(id = R.string.socionic_type),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, bottom = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        TextField(
-            value = socionicTypeNumber.toString(),
-            onValueChange = { socionicTypeNumber = it.toInt() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearFocusOnKeyboardDismiss(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
-            ),
-            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center)
-        )
-
-        Text(
-            text = stringResource(id = R.string.personalities),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, bottom = 8.dp),
-            textAlign = TextAlign.Start
-        )
-        var isPersonalitiesTypeExposed by remember {
-            mutableStateOf(false)
-        }
-        var selectedType by rememberSaveable {
-            mutableStateOf(Personalities.values().first())
-        }
-        ExposedDropdownMenuBox(
-            expanded = isPersonalitiesTypeExposed,
-            onExpandedChange = { isPersonalitiesTypeExposed = it }
-        ) {
-            TextField(
-                value = stringResource(id = selectedType.stringRes),
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(
-                        expanded = isPersonalitiesTypeExposed
-                    )
-                },
-                colors = ExposedDropdownMenuDefaults.textFieldColors()
-            )
-            ExposedDropdownMenu(
-                expanded = isPersonalitiesTypeExposed,
-                onDismissRequest = { isPersonalitiesTypeExposed = false }
+        if (imageLink == "") {
+            Button(
+                onClick = { launcher.launch("image/*") },
+                modifier = Modifier
+                    .padding(top = 60.dp, bottom = 40.dp)
+                    .size(60.dp),
+                shape = CircleShape
             ) {
-                Personalities.values().forEach { currentType ->
-                    DropdownMenuItem(onClick = {
-                        selectedType = currentType
-                        isPersonalitiesTypeExposed = false
-                    }) {
-                        Text(text = stringResource(id = currentType.stringRes))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_add_a_photo_24),
+                    contentDescription = stringResource(id = R.string.select_photo)
+                )
+            }
+        } else {
+            val bitmap: Bitmap = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                MediaStore.Images.Media.getBitmap(
+                    LocalContext.current.contentResolver,
+                    Uri.parse(imageLink)
+                )
+            } else {
+                val source = ImageDecoder.createSource(
+                    LocalContext.current.contentResolver,
+                    Uri.parse(imageLink)
+                )
+                ImageDecoder.decodeBitmap(source)
+            }
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(300.dp)
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Fit
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearFocusOnClick()
+                .padding(horizontal = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.name),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            TextField(
+                value = name,
+                onValueChange = { name = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clearFocusOnKeyboardDismiss(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent
+                ),
+                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+                singleLine = true
+            )
+            Text(
+                text = stringResource(id = R.string.city),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            TextField(
+                value = city, onValueChange = { city = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clearFocusOnKeyboardDismiss(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent
+                ),
+                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+                singleLine = true
+            )
+
+            Text(
+                text = stringResource(id = R.string.birthday),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            TextField(
+                value = if (birthday != null) birthday.toString() else "",
+                onValueChange = { },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { dialogState.show() },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
+                ),
+                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                trailingIcon = {
+                    IconButton(onClick = { dialogState.show() }) {
+                        Icon(imageVector = Icons.Default.DateRange, contentDescription = "")
+                    }
+                },
+                enabled = false
+            )
+            Text(
+                text = stringResource(id = R.string.description),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            TextField(
+                value = description,
+                onValueChange = { description = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .clearFocusOnKeyboardDismiss(),
+                placeholder = {
+                    Text(text = stringResource(id = R.string.describe_yourself))
+                }
+            )
+
+            Text(
+                text = stringResource(id = R.string.zodiac_sign),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            val zodiacText = if (zodiacId != -1) {
+                val sign = Zodiac.values()[zodiacId]
+                stringResource(id = sign.stringRes)
+            } else {
+                stringResource(id = R.string.you_have_to_enter_birthday)
+            }
+            TextField(
+                value = zodiacText,
+                onValueChange = { },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
+                ),
+                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+                enabled = false
+            )
+
+            Text(
+                text = stringResource(id = R.string.fate_number),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            TextField(
+                value = fateNumber.toString(),
+                onValueChange = { },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current)
+                ),
+                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
+                enabled = false
+            )
+
+            // TODO: 13.12.2021 Неужели соционический тип дублирует персоналити?!
+            Text(
+                text = stringResource(id = R.string.socionic_type),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            TextField(
+                value = socionicTypeNumber.toString(),
+                onValueChange = { socionicTypeNumber = it.toInt() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clearFocusOnKeyboardDismiss(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent
+                ),
+                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center)
+            )
+
+            Text(
+                text = stringResource(id = R.string.personalities),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 8.dp),
+                textAlign = TextAlign.Start
+            )
+            var isPersonalitiesTypeExposed by remember {
+                mutableStateOf(false)
+            }
+            var selectedType by rememberSaveable {
+                mutableStateOf(Personalities.values().first())
+            }
+            ExposedDropdownMenuBox(
+                expanded = isPersonalitiesTypeExposed,
+                onExpandedChange = { isPersonalitiesTypeExposed = it }
+            ) {
+                TextField(
+                    value = stringResource(id = selectedType.stringRes),
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = isPersonalitiesTypeExposed
+                        )
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                )
+                ExposedDropdownMenu(
+                    expanded = isPersonalitiesTypeExposed,
+                    onDismissRequest = { isPersonalitiesTypeExposed = false }
+                ) {
+                    Personalities.values().forEach { currentType ->
+                        DropdownMenuItem(onClick = {
+                            selectedType = currentType
+                            isPersonalitiesTypeExposed = false
+                        }) {
+                            Text(text = stringResource(id = currentType.stringRes))
+                        }
                     }
                 }
             }
-        }
 
-        Button(
-            onClick = {
-                val profileEntity = ProfileEntity(
-                    name = name,
-                    city = city,
-                    age = 0,
-                    birthday = DateEntity(0, 0, 0),
-                    description = description,
-                    zodiacId = 0,
-                    fateNumber = 0,
-                    socionicTypeNumber = 0,
-                    personalitiesNumber = 0,
-                    imageLink = ""
-                )
-                onSaveProfile(profileEntity)
-            },
-            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-            enabled = name.isNotBlank() && city.isNotBlank() && birthday != null && description.isNotBlank()
-        ) {
-            Text(text = stringResource(id = R.string.save))
+            Button(
+                onClick = {
+                    val profileEntity = ProfileEntity(
+                        name = name,
+                        city = city,
+                        age = 0,
+                        birthday = DateEntity(0, 0, 0),
+                        description = description,
+                        zodiacId = 0,
+                        fateNumber = 0,
+                        socionicTypeNumber = 0,
+                        personalitiesNumber = 0,
+                        imageLink = ""
+                    )
+                    onSaveProfile(profileEntity)
+                },
+                modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                enabled = name.isNotBlank() && city.isNotBlank() && birthday != null && description.isNotBlank()
+            ) {
+                Text(text = stringResource(id = R.string.save))
+            }
         }
     }
 }
