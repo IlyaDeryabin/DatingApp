@@ -22,7 +22,7 @@ fun PhoneNumberField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.clearFocusOnKeyboardDismiss(),
         singleLine = true,
         label = { Text(text = stringResource(id = R.string.phone_number)) },
         enabled = enabled,

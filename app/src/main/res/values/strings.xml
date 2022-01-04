@@ -76,6 +76,16 @@
     <string name="turn_back">Turn back</string>
     <string name="no_results">No results</string>
     <string name="clear">Clear</string>
+    <string name="invalid_login_or_password">Invalid phone number or password</string>
+    <string name="server_does_not_responding">Server does not responding</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="user_already_exist">User with already exist</string>
+    <string name="passwords_are_not_same">Passwords are not same</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="select_date">Select date</string>
+    <string name="you_have_to_enter_birthday">You have to enter birthday</string>
+    <string name="change_photo">Change photo</string>
     <string name="enable_dark_theme">Enable dark theme</string>
     <string name="sign_out">Sign out</string>
 </resources>

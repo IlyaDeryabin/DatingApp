@@ -1,7 +1,5 @@
 package ru.d3rvich.datingapp.domain.entity
 
-import kotlinx.coroutines.flow.Flow
-
 /**
  * Data классы-сущности domain слоя
  * */
@@ -40,5 +38,25 @@ data class ProfileEntity(
 data class DateEntity(val day: Int, val month: Int, val year: Int) {
     override fun toString(): String {
         return "$day.$month.$year"
+    }
+
+    companion object {
+        /**
+         * Принимает строку в формате "dd.MM.yyyy"
+         * @param date строка в формате "dd.MM.yyyy"
+         * */
+        fun parse(date: String): DateEntity {
+            val parsedString = date.split('.')
+            require(parsedString.size == 3)
+            val dayOfMonth = parsedString[0]
+            val month = parsedString[1]
+            val year = parsedString[2]
+            require(dayOfMonth.length <= 2 && month.length <= 2 && year.length <= 4)
+            return DateEntity(
+                dayOfMonth.toInt(),
+                month.toInt(),
+                year.toInt()
+            )
+        }
     }
 }

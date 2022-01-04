@@ -34,6 +34,7 @@ import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.MessageEntity
 import ru.d3rvich.datingapp.domain.entity.UserEntity
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
+import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 
 @Composable
 fun DialogViewDisplay(
@@ -149,7 +150,9 @@ private fun InputField(onSendMessage: (String) -> Unit) {
     TextField(
         value = text,
         onValueChange = { text = it },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clearFocusOnKeyboardDismiss(),
         trailingIcon = {
             IconButton(onClick = {
                 onSendMessage(text)

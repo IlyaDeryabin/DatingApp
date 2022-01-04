@@ -76,6 +76,15 @@
     <string name="turn_back">Вернуться</string>
     <string name="no_results">Нет результатов</string>
     <string name="clear">Очистить</string>
+    <string name="invalid_login_or_password">Неверный номер телефона или пароль</string>
+    <string name="server_does_not_responding">Сервер не отвечает</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="user_already_exist">Пользователь уже существует</string>
+    <string name="passwords_are_not_same">Пароли не совпадают</string>
+    <string name="cancel">Отмена</string>
+    <string name="select_date">Выберите дату</string>
+    <string name="you_have_to_enter_birthday">Нужно ввести дату рождения</string>
+    <string name="change_photo">Изменить фото</string>
     <string name="enable_dark_theme">Включить тёмную тему</string>
     <string name="sign_out">Выйти из системы</string>
 </resources>

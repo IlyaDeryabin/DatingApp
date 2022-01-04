@@ -26,11 +26,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.AuthEntity
+import ru.d3rvich.datingapp.domain.exceptions.AuthException
 import ru.d3rvich.datingapp.ui.common.PasswordField
 import ru.d3rvich.datingapp.ui.common.PhoneNumberField
+import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginViewState
 
 @ExperimentalAnimationApi
@@ -51,12 +54,12 @@ fun LoginViewDisplay(
         mutableStateOf("")
     }
     val isPhoneNumberValid: Boolean = phoneNumber.isNotBlank() && phoneNumber.length == 10
-    val isTextFieldsEnable: Boolean = state is LoginViewState.Login
+    val isTextFieldsEnable: Boolean = state !is LoginViewState.LoginOnProcess
 
     Box(
         modifier = Modifier
-            .fillMaxHeight(0.8f)
-            .fillMaxWidth()
+            .fillMaxSize()
+            .clearFocusOnClick()
     ) {
         val focusManager = LocalFocusManager.current
         Text(text = stringResource(id = R.string.sign_up), modifier = Modifier
@@ -121,11 +124,21 @@ fun LoginViewDisplay(
                     .onKeyEvent { onBackKeyEvent(it, focusManager) }
             )
             AnimatedVisibility(visible = state is LoginViewState.LoginFailure) {
-                Text(
-                    text = "Ошибка при входе в систему",
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = Color.Red
-                )
+                if (state is LoginViewState.LoginFailure) { // Проверка на случай перехода от LoginFailure к другому состоянию
+                    val errorText: Int = when (state.exception) {
+                        AuthException.InvalidLoginOrPassword -> R.string.invalid_login_or_password
+                        AuthException.ServerNotResponding -> R.string.server_does_not_responding
+                        else -> R.string.unknown_error
+                    }
+                    Text(
+                        text = stringResource(id = errorText),
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth(),
+                        color = Color.Red,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
             Button(

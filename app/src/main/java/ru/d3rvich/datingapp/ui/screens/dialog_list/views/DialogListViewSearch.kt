@@ -1,5 +1,6 @@
 package ru.d3rvich.datingapp.ui.screens.dialog_list.views
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import coil.annotation.ExperimentalCoilApi
 import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.domain.entity.DialogListItemEntity
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
+import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 
 @ExperimentalCoilApi
 @Composable
@@ -44,7 +46,9 @@ fun DialogListViewSearch(
                     value = text,
                     onValueChange = onTextChange,
                     placeholder = { Text(text = stringResource(id = R.string.search_placeholder_text)) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clearFocusOnKeyboardDismiss(),
                     leadingIcon = {
                         IconButton(onClick = {
                             focusManager.clearFocus()
@@ -72,6 +76,9 @@ fun DialogListViewSearch(
                 )
             }
         }) {
+        BackHandler {
+            onBackPressed()
+        }
         if (dialogs.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(

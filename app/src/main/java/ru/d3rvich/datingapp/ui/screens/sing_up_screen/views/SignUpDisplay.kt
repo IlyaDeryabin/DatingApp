@@ -22,19 +22,21 @@ import ru.d3rvich.datingapp.R
 import ru.d3rvich.datingapp.ui.common.PasswordField
 import ru.d3rvich.datingapp.ui.common.PhoneNumberField
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
-import ru.d3rvich.datingapp.ui.model.SingUpUiModel
+import ru.d3rvich.datingapp.ui.model.SignupUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 
 @ExperimentalAnimationApi
 @Composable
 fun SignUpDisplay(
     viewState: SignUpViewState,
-    onSignUpButtonClicked: (SingUpUiModel) -> Unit,
+    onSignUpButtonClicked: (SignupUiModel) -> Unit,
     onLoginButtonClicked: () -> Unit
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .clearFocusOnClick()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clearFocusOnClick()
+    ) {
         Text(text = stringResource(id = R.string.log_in),
             modifier = Modifier
                 .padding(8.dp)
@@ -57,12 +59,14 @@ fun SignUpDisplay(
             var passwordSecond by rememberSaveable {
                 mutableStateOf("")
             }
+            val isPhoneNumberValid: Boolean = phoneNumber.isNotBlank() && phoneNumber.length == 10
             PhoneNumberField(
                 value = phoneNumber,
                 onValueChange = { phoneNumber = it.replace(Regex("[^0-9]"), "") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone
-                )
+                ),
+                isError = phoneNumber.isNotBlank() && !isPhoneNumberValid
             )
             Spacer(modifier = Modifier.height(8.dp))
             PasswordField(
@@ -84,8 +88,8 @@ fun SignUpDisplay(
             AnimatedVisibility(visible = viewState is SignUpViewState.Error) {
                 if (viewState is SignUpViewState.Error) {
                     Text(
-                        text = viewState.massage,
-                        modifier = Modifier.padding(top = 8.dp),
+                        text = stringResource(id = viewState.errorMessageStringRes),
+                        modifier = Modifier.padding(top = 16.dp),
                         color = Color.Red
                     )
                 }
@@ -95,12 +99,15 @@ fun SignUpDisplay(
                 onClick = {
                     if (viewState !is SignUpViewState.InProgress) {
                         val signUpUiModel =
-                            SingUpUiModel(phoneNumber, passwordFirst, passwordSecond)
+                            SignupUiModel(phoneNumber, passwordFirst, passwordSecond)
                         onSignUpButtonClicked(signUpUiModel)
                     }
                 },
                 modifier = Modifier.animateContentSize(),
-                enabled = phoneNumber != "" && passwordFirst != "" && passwordSecond != ""
+                enabled = phoneNumber.isNotEmpty() &&
+                        passwordFirst.isNotEmpty() &&
+                        passwordSecond.isNotEmpty() &&
+                        isPhoneNumberValid
             ) {
                 if (viewState is SignUpViewState.InProgress) {
                     CircularProgressIndicator(

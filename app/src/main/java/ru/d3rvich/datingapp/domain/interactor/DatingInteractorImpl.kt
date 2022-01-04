@@ -5,6 +5,7 @@ import ru.d3rvich.datingapp.domain.entity.*
 import ru.d3rvich.datingapp.domain.repositories.AuthRepository
 import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 import ru.d3rvich.datingapp.domain.repositories.ProfileRepository
+import ru.d3rvich.datingapp.domain.utils.AuthResult
 import javax.inject.Inject
 
 class DatingInteractorImpl @Inject constructor(
@@ -13,11 +14,11 @@ class DatingInteractorImpl @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : DatingInteractor {
 
-    override suspend fun performLogin(authEntity: AuthEntity): Boolean {
+    override suspend fun performLogin(authEntity: AuthEntity): AuthResult {
         return authRepository.performLogin(authEntity)
     }
 
-    override suspend fun performSignUp(authEntity: AuthEntity): Boolean {
+    override suspend fun performSignUp(authEntity: AuthEntity): AuthResult {
         return authRepository.registerNewUser(authEntity)
     }
 
