@@ -1,10 +1,5 @@
 package ru.d3rvich.datingapp.ui.screens.profile_editor.views
 
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -20,9 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -30,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -119,30 +113,20 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 )
             }
         } else {
-            val bitmap: Bitmap = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                MediaStore.Images.Media.getBitmap(
-                    LocalContext.current.contentResolver,
-                    Uri.parse(imageLink)
-                )
-            } else {
-                val source = ImageDecoder.createSource(
-                    LocalContext.current.contentResolver,
-                    Uri.parse(imageLink)
-                )
-                ImageDecoder.decodeBitmap(source)
-            }
+            val painter = rememberImagePainter(data = imageLink)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(400.dp)
             ) {
                 Image(
-                    bitmap = bitmap.asImageBitmap(),
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Fit
                 )
-                Box(modifier = Modifier.align(Alignment.BottomCenter)
+                Box(modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .background(
                         Brush.verticalGradient(
@@ -294,7 +278,6 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 enabled = false
             )
 
-            // TODO: 13.12.2021 Неужели соционический тип дублирует персоналити?!
             Text(
                 text = stringResource(id = R.string.socionic_type),
                 modifier = Modifier
@@ -313,6 +296,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 ),
                 textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center)
             )
+            // TODO: 04.01.2022 Добавить тест
 
             Text(
                 text = stringResource(id = R.string.personalities),
@@ -356,6 +340,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     }
                 }
             }
+            // TODO: 04.01.2022 Добавить тест
 
             Button(
                 onClick = {
