@@ -7,13 +7,10 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -21,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -81,7 +79,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            imageLink = uri?.toString() ?: ""
+            imageLink = uri?.toString() ?: imageLink
         }
     )
     val scrollState = rememberScrollState()
@@ -111,7 +109,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             Button(
                 onClick = { launcher.launch("image/*") },
                 modifier = Modifier
-                    .padding(top = 60.dp, bottom = 40.dp)
+                    .padding(top = 60.dp, bottom = 60.dp)
                     .size(60.dp),
                 shape = CircleShape
             ) {
@@ -133,14 +131,32 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 )
                 ImageDecoder.decodeBitmap(source)
             }
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = null,
+            Box(
                 modifier = Modifier
-                    .height(300.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Fit
-            )
+                    .fillMaxWidth()
+                    .height(400.dp)
+            ) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+                Box(modifier = Modifier.align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color.Transparent, MaterialTheme.colors.surface)
+                        )
+                    )) {
+                    TextButton(
+                        onClick = { launcher.launch("image/*") },
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    ) {
+                        Text(text = stringResource(id = R.string.change_photo))
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(12.dp))
         }
         Column(
