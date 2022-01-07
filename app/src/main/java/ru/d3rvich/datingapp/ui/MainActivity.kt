@@ -30,6 +30,8 @@ import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginViewModel
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorScreen
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorViewModel
+import ru.d3rvich.datingapp.ui.screens.profile_view.ProfileViewScreen
+import ru.d3rvich.datingapp.ui.screens.profile_view.ProfileViewViewModel
 import ru.d3rvich.datingapp.ui.screens.settings.SettingsScreen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpScreen
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.SignUpViewModel
@@ -104,12 +106,11 @@ class MainActivity : ComponentActivity() {
                                 DialogScreen(navController = navController)
                             }
                             composable(Screen.ProfileScreen.route) {
-                                Column {
-                                    Text(text = "Profile view")
-                                    Button(onClick = { navController.navigate(Screen.EmptyProfileEditor.route) }) {
-                                        Text(text = "Edit profile")
-                                    }
-                                }
+                                val viewModel: ProfileViewViewModel by viewModels()
+                                ProfileViewScreen(
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
                             }
                             composable(Screen.EmptyProfileEditor.route) {
                                 val viewModel: ProfileEditorViewModel by viewModels()
