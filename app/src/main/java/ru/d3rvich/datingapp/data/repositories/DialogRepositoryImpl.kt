@@ -2,6 +2,7 @@ package ru.d3rvich.datingapp.data.repositories
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import ru.d3rvich.datingapp.data.services.DialogService
 import ru.d3rvich.datingapp.domain.entity.DialogEntity
 import ru.d3rvich.datingapp.domain.entity.DialogListItemEntity
 import ru.d3rvich.datingapp.domain.entity.MessageEntity
@@ -9,7 +10,7 @@ import ru.d3rvich.datingapp.domain.entity.UserEntity
 import ru.d3rvich.datingapp.domain.repositories.DialogRepository
 import java.time.LocalDateTime
 
-class DialogRepositoryImpl : DialogRepository {
+class DialogRepositoryImpl constructor(private val dialogService: DialogService) : DialogRepository {
     private var currentDialogMessageFlow: MutableSharedFlow<MessageEntity>? = null
 
     override suspend fun getDialogList(): List<DialogListItemEntity> {
