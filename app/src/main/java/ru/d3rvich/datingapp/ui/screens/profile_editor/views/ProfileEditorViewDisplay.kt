@@ -32,6 +32,7 @@ import ru.d3rvich.datingapp.domain.entity.ProfileEntity
 import ru.d3rvich.datingapp.domain.utils.calculateFateNumber
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
+import ru.d3rvich.datingapp.ui.common.clearFocusOnMenuDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
 import ru.d3rvich.datingapp.ui.constants.SocionicTypes
 import ru.d3rvich.datingapp.ui.constants.Zodiac
@@ -268,8 +269,13 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     .padding(start = 8.dp, bottom = 8.dp),
                 textAlign = TextAlign.Start
             )
+            val fateFieldText: String = if (fateNumber != 0) {
+                fateNumber.toString()
+            } else {
+                stringResource(id = R.string.you_have_to_enter_birthday)
+            }
             TextField(
-                value = fateNumber.toString(),
+                value = fateFieldText,
                 onValueChange = { },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.textFieldColors(
@@ -287,15 +293,15 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     .padding(start = 8.dp, bottom = 8.dp),
                 textAlign = TextAlign.Start
             )
-            var isSocionicExposed by remember {
+            var isSocionicExpanded by remember {
                 mutableStateOf(false)
             }
             var selectedSocionicType by rememberSaveable {
                 mutableStateOf(SocionicTypes.first())
             }
             ExposedDropdownMenuBox(
-                expanded = isSocionicExposed,
-                onExpandedChange = { isSocionicExposed = it }
+                expanded = isSocionicExpanded,
+                onExpandedChange = { isSocionicExpanded = it }
             ) {
                 TextField(
                     value = selectedSocionicType,
@@ -303,20 +309,21 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     readOnly = true,
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = isSocionicExposed
+                            expanded = isSocionicExpanded
                         )
                     },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier.clearFocusOnMenuDismiss(expanded = isSocionicExpanded)
                 )
                 ExposedDropdownMenu(
-                    expanded = isSocionicExposed,
-                    onDismissRequest = { isSocionicExposed = false }
+                    expanded = isSocionicExpanded,
+                    onDismissRequest = { isSocionicExpanded = false }
                 ) {
                     SocionicTypes.forEach { currentType ->
                         DropdownMenuItem(onClick = {
                             socionicTypeNumber = SocionicTypes.indexOf(currentType)
                             selectedSocionicType = currentType
-                            isSocionicExposed = false
+                            isSocionicExpanded = false
                         }) {
                             Text(text = currentType)
                         }
@@ -351,7 +358,8 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                             expanded = isPersonalitiesTypeExposed
                         )
                     },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier.clearFocusOnMenuDismiss(expanded = isPersonalitiesTypeExposed)
                 )
                 ExposedDropdownMenu(
                     expanded = isPersonalitiesTypeExposed,
@@ -388,8 +396,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     onSaveProfile(profileEntity)
                 },
                 modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                shape = CircleShape
             ) {
                 Text(text = stringResource(id = R.string.save))
             }

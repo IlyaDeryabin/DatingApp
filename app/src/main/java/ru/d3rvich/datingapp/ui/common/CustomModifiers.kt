@@ -43,3 +43,33 @@ fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
         }
     }
 }
+
+fun Modifier.clearFocusOnMenuDismiss(expanded: Boolean): Modifier = composed {
+    var isFocused by remember {
+        mutableStateOf(false)
+    }
+    var menuAppearedSinceLastFocused by remember {
+        mutableStateOf(false)
+    }
+    if (isFocused) {
+        val focusManager = LocalFocusManager.current
+        LaunchedEffect(expanded) {
+            when {
+                expanded -> {
+                    menuAppearedSinceLastFocused = true
+                }
+                menuAppearedSinceLastFocused -> {
+                    focusManager.clearFocus()
+                }
+            }
+        }
+    }
+    onFocusEvent {
+        if (isFocused != it.isFocused) {
+            isFocused = it.isFocused
+            if (isFocused) {
+                menuAppearedSinceLastFocused = false
+            }
+        }
+    }
+}
