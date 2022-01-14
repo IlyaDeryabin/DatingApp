@@ -27,6 +27,27 @@ enum class Personalities(@StringRes val stringRes: Int) {
     ESTP(R.string.pers_dynamo)
 }
 
+val SocionicTypes by lazy {
+    listOf(
+        "Штирлиц",
+        "Максим Горький",
+        "Джек Лондон",
+        "Робеспьер",
+        "Гюго",
+        "Драйзер",
+        "Гамлет",
+        "Достоевский",
+        "Жуков",
+        "Габен",
+        "Наполеон",
+        "Дюма",
+        "Дон Кихот",
+        "Бальзак",
+        "Гексли",
+        "Есенин",
+    )
+}
+
 enum class Zodiac(
     @StringRes val stringRes: Int,
     private val range: Pair<DateRangeUiModel, DateRangeUiModel>

@@ -28,12 +28,12 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import ru.d3rvich.datingapp.R
-import ru.d3rvich.datingapp.domain.entity.DateEntity
 import ru.d3rvich.datingapp.domain.entity.ProfileEntity
 import ru.d3rvich.datingapp.domain.utils.calculateFateNumber
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.common.clearFocusOnKeyboardDismiss
 import ru.d3rvich.datingapp.ui.constants.Personalities
+import ru.d3rvich.datingapp.ui.constants.SocionicTypes
 import ru.d3rvich.datingapp.ui.constants.Zodiac
 import ru.d3rvich.datingapp.ui.mappers.toDateEntity
 import ru.d3rvich.datingapp.ui.mappers.toLocalDate
@@ -125,14 +125,16 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Fit
                 )
-                Box(modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color.Transparent, MaterialTheme.colors.surface)
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(Color.Transparent, MaterialTheme.colors.surface)
+                            )
                         )
-                    )) {
+                ) {
                     TextButton(
                         onClick = { launcher.launch("image/*") },
                         modifier = Modifier.align(Alignment.BottomCenter)
@@ -285,17 +287,42 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                     .padding(start = 8.dp, bottom = 8.dp),
                 textAlign = TextAlign.Start
             )
-            TextField(
-                value = socionicTypeNumber.toString(),
-                onValueChange = { socionicTypeNumber = it.toInt() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clearFocusOnKeyboardDismiss(),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent
-                ),
-                textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center)
-            )
+            var isSocionicExposed by remember {
+                mutableStateOf(false)
+            }
+            var selectedSocionicType by rememberSaveable {
+                mutableStateOf(SocionicTypes.first())
+            }
+            ExposedDropdownMenuBox(
+                expanded = isSocionicExposed,
+                onExpandedChange = { isSocionicExposed = it }
+            ) {
+                TextField(
+                    value = selectedSocionicType,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = isSocionicExposed
+                        )
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                )
+                ExposedDropdownMenu(
+                    expanded = isSocionicExposed,
+                    onDismissRequest = { isSocionicExposed = false }
+                ) {
+                    SocionicTypes.forEach { currentType ->
+                        DropdownMenuItem(onClick = {
+                            socionicTypeNumber = SocionicTypes.indexOf(currentType)
+                            selectedSocionicType = currentType
+                            isSocionicExposed = false
+                        }) {
+                            Text(text = currentType)
+                        }
+                    }
+                }
+            }
             // TODO: 04.01.2022 Добавить тест
 
             Text(
@@ -308,7 +335,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             var isPersonalitiesTypeExposed by remember {
                 mutableStateOf(false)
             }
-            var selectedType by rememberSaveable {
+            var selectedPersonalityType by rememberSaveable {
                 mutableStateOf(Personalities.values().first())
             }
             ExposedDropdownMenuBox(
@@ -316,7 +343,7 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 onExpandedChange = { isPersonalitiesTypeExposed = it }
             ) {
                 TextField(
-                    value = stringResource(id = selectedType.stringRes),
+                    value = stringResource(id = selectedPersonalityType.stringRes),
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
@@ -332,7 +359,8 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
                 ) {
                     Personalities.values().forEach { currentType ->
                         DropdownMenuItem(onClick = {
-                            selectedType = currentType
+                            personalitiesNumber = Personalities.values().indexOf(currentType)
+                            selectedPersonalityType = currentType
                             isPersonalitiesTypeExposed = false
                         }) {
                             Text(text = stringResource(id = currentType.stringRes))
@@ -343,25 +371,25 @@ fun ProfileEditorViewDisplay(profile: ProfileEntity?, onSaveProfile: (ProfileEnt
             // TODO: 04.01.2022 Добавить тест
 
             Button(
+                enabled = name.isNotBlank() && city.isNotBlank() && birthday != null && description.isNotBlank(),
                 onClick = {
                     val profileEntity = ProfileEntity(
                         name = name,
                         city = city,
                         age = 0,
-                        birthday = DateEntity(0, 0, 0),
+                        birthday = birthday!!,
                         description = description,
-                        zodiacId = 0,
-                        fateNumber = 0,
-                        socionicTypeNumber = 0,
-                        personalitiesNumber = 0,
-                        imageLink = ""
+                        zodiacId = zodiacId,
+                        fateNumber = fateNumber,
+                        socionicTypeNumber = socionicTypeNumber,
+                        personalitiesNumber = personalitiesNumber,
+                        imageLink = imageLink
                     )
                     onSaveProfile(profileEntity)
                 },
                 modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
                 shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                enabled = name.isNotBlank() && city.isNotBlank() && birthday != null && description.isNotBlank()
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(text = stringResource(id = R.string.save))
             }
