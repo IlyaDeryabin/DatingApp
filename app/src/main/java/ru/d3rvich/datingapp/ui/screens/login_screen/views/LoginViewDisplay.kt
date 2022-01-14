@@ -1,7 +1,6 @@
 package ru.d3rvich.datingapp.ui.screens.login_screen.views
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,16 +10,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -36,8 +29,6 @@ import ru.d3rvich.datingapp.ui.common.PhoneNumberField
 import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.screens.login_screen.models.LoginViewState
 
-@ExperimentalAnimationApi
-@ExperimentalComposeUiApi
 @Composable
 fun LoginViewDisplay(
     state: LoginViewState,
@@ -90,8 +81,7 @@ fun LoginViewDisplay(
                 ), enabled = isTextFieldsEnable,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .focusRequester(phoneFieldFocusRequester)
-                    .onKeyEvent { onBackKeyEvent(it, focusManager) },
+                    .focusRequester(phoneFieldFocusRequester),
                 keyboardActions = KeyboardActions(onNext = {
                     passwordFieldFocusRequester.requestFocus()
                 }, onDone = {
@@ -121,7 +111,6 @@ fun LoginViewDisplay(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(passwordFieldFocusRequester)
-                    .onKeyEvent { onBackKeyEvent(it, focusManager) }
             )
             AnimatedVisibility(visible = state is LoginViewState.LoginFailure) {
                 if (state is LoginViewState.LoginFailure) { // Проверка на случай перехода от LoginFailure к другому состоянию
@@ -160,15 +149,5 @@ fun LoginViewDisplay(
                 }
             }
         }
-    }
-}
-
-@ExperimentalComposeUiApi
-fun onBackKeyEvent(keyEvent: KeyEvent, focusManager: FocusManager): Boolean {
-    return if (keyEvent.key == Key.Back) {
-        focusManager.clearFocus()
-        true
-    } else {
-        false
     }
 }

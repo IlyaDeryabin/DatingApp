@@ -2,7 +2,6 @@ package ru.d3rvich.datingapp.ui.screens.main
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -25,7 +24,6 @@ import ru.d3rvich.datingapp.ui.screens.main.models.MainScreenState
 import ru.d3rvich.datingapp.ui.screens.main.views.Drawer
 import ru.d3rvich.datingapp.ui.screens.pair_search.PairSearchScreen
 
-@ExperimentalAnimationApi
 @ExperimentalCoilApi
 @Composable
 fun MainScreen(router: Router, isDarkMode: Boolean, onDarkModeChanged: (Boolean) -> Unit) {

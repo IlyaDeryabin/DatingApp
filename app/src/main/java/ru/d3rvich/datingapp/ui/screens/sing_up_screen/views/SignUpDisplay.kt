@@ -1,7 +1,6 @@
 package ru.d3rvich.datingapp.ui.screens.sing_up_screen.views
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,7 +24,6 @@ import ru.d3rvich.datingapp.ui.common.clearFocusOnClick
 import ru.d3rvich.datingapp.ui.model.SignupUiModel
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpViewState
 
-@ExperimentalAnimationApi
 @Composable
 fun SignUpDisplay(
     viewState: SignUpViewState,

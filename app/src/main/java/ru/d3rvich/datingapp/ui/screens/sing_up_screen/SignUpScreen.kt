@@ -1,6 +1,5 @@
 package ru.d3rvich.datingapp.ui.screens.sing_up_screen
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -14,7 +13,6 @@ import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpAction
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.models.SignUpEvent
 import ru.d3rvich.datingapp.ui.screens.sing_up_screen.views.SignUpDisplay
 
-@ExperimentalAnimationApi
 @Composable
 fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel) {
     val focusManager = LocalFocusManager.current
