@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,15 +19,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.insets.*
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsWithImePadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.d3rvich.datingapp.ui.navigation.createExternalRouter
-import ru.d3rvich.datingapp.ui.screens.main.MainScreen
 import ru.d3rvich.datingapp.ui.screens.dialog.DIALOG_ID_KEY
 import ru.d3rvich.datingapp.ui.screens.dialog.DialogScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginScreen
 import ru.d3rvich.datingapp.ui.screens.login_screen.LoginViewModel
+import ru.d3rvich.datingapp.ui.screens.main.MainScreen
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorScreen
 import ru.d3rvich.datingapp.ui.screens.profile_editor.ProfileEditorViewModel
 import ru.d3rvich.datingapp.ui.screens.profile_view.ProfileViewScreen
@@ -70,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         val navController = rememberNavController()
                         NavHost(
                             navController = navController,
-                            startDestination = Screen.LoginScreen.route
+                            startDestination = Screen.MainScreen.route
                         ) {
                             composable(Screen.MainScreen.route) {
                                 MainScreen(
